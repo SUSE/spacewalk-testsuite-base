@@ -7,18 +7,9 @@ require "rake/clean"
 $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 require "spacewalk_testsuite_base/version"
 
-if ENV['MANAGER_BRANCH']
-  ENV['LD_LIBRARY_PATH'] = "/usr/lib64/oracle/10.2.0.4/client/lib/"
-end
-
 features_task = Cucumber::Rake::Task.new do |t|
   cucumber_opts = %w{--format pretty}
   #cucumber_opts = cucumber_opts + %w{-o /tmp/cucumber.log}
-  if ENV['MANAGER_BRANCH']
-      cucumber_opts << %w{--tags ~@monitoring --tags ~@manager12}
-  else
-      cucumber_opts << %w{--tags ~@without_monitoring --tags ~@manager16}
-  end
   feature_files  = %w{
                      features/database.feature
                      features/init_user_create.feature
@@ -35,11 +26,7 @@ features_task = Cucumber::Rake::Task.new do |t|
                      features/users-userdetails.feature
                      features/create_config_channel.feature
                      features/register_client.feature
-  }
-  if not ENV['MANAGER_BRANCH']
-      feature_files << "features/monitoring.feature"
-  end
-  feature_files << %w{
+                     features/monitoring.feature
                      features/system_configuration.feature
                      features/custom_system_info.feature
                      features/create_group.feature
@@ -52,27 +39,12 @@ features_task = Cucumber::Rake::Task.new do |t|
                      features/channels.feature
                      features/weak_deps.feature
                      features/check_registration.feature
-  }
-  if ENV['MANAGER_BRANCH']
-      feature_files << "features/check_errata-npn.feature"
-  else
-      feature_files << "features/check_errata.feature"
-  end
-  feature_files << %w{
+                     features/check_errata.feature
                      features/erratapage.feature
                      features/install_package.feature
-  }
-  if ENV['MANAGER_BRANCH']
-      feature_files << "features/install_errata-npn.feature"
-      feature_files << "features/clone_channel-npn.feature"
-  else
-      feature_files << %w{
-                          features/install_errata.feature
-                          features/clone_channel.feature
-                          features/monitoring2.feature
-      }
-  end
-  feature_files << %w{
+                     features/install_errata.feature
+                     features/clone_channel.feature
+                     features/monitoring2.feature
                      features/test_config_channel.feature
                      features/ncc-sync-channels.feature
                      features/xmlrpc_system.feature

@@ -27,7 +27,6 @@ Feature: Explore the main landing page
      And I should see a "Download CSV" link
      And I should see a "Sign Out" link
 
-  @monitoring
   Scenario: Completeness of the main navigation bar
     Given I am authorized
     When I follow "Systems"
@@ -39,19 +38,6 @@ Feature: Explore the main landing page
      And I should see a "Schedule" link in the tab bar
      And I should see a "Users" link in the tab bar
      And I should see a "Monitoring" link in the tab bar
-     And I should see a "Help" link in the tab bar
-
-  @without_monitoring
-  Scenario: Completeness of the main navigation bar
-    Given I am authorized
-    When I follow "Systems"
-    Then I should see a "Overview" link in the tab bar
-     And I should see a "Systems" link in the tab bar
-     And I should see a "Errata" link in the tab bar
-     And I should see a "Channels" link in the tab bar
-     And I should see a "Configuration" link in the tab bar
-     And I should see a "Schedule" link in the tab bar
-     And I should see a "Users" link in the tab bar
      And I should see a "Help" link in the tab bar
 
   Scenario: Check sidebar link destination for Systems
@@ -186,7 +172,6 @@ Feature: Explore the main landing page
      And I should see a "create new key" link
      And I should see a "No Custom Info Keys Found" text
 
-  @manager12
   Scenario: Check sidebar link destination for Systems => Kickstart
     Given I am on the Systems page
       And I follow "Kickstart" in the left menu
@@ -197,23 +182,6 @@ Feature: Explore the main landing page
      And I should see a "Distributions" link in the left menu
      And I should see a "File Preservation" link in the left menu
      And I should see a "Kickstart Snippets" link in the left menu
-     And I should see a "create new kickstart profile" link
-     And I should see a "upload new kickstart file" link
-     And I should see a "View a List of Kickstart Profiles" link
-     And I should see a "Create a New Kickstart Profile" link
-     And I should see a "Upload a New Kickstart File" link
-
-   @manager16
-   Scenario: Check sidebar link destination for Systems => Kickstart
-    Given I am on the Systems page
-      And I follow "Kickstart" in the left menu
-    Then I should see a "Kickstart Overview" text
-     And I should see a "Profiles" link in the left menu
-     And I should see a "Bare Metal" link in the left menu
-     And I should see a "GPG and SSL Keys" link in the left menu
-     And I should see a "Distributions" link in the left menu
-     And I should see a "File Preservation" link in the left menu
-     And I should see a "Autoinstallation Snippets" link in the left menu
      And I should see a "create new kickstart profile" link
      And I should see a "upload new kickstart file" link
      And I should see a "View a List of Kickstart Profiles" link
@@ -260,25 +228,12 @@ Feature: Explore the main landing page
      And I should see a "RHN Reference Guide" link
      And I should see a "create new file preservation list" link
 
-  @manager12
   Scenario: Check sidebar link destination for Systems => Kickstart => Kickstart Snippets
     Given I am on the Systems page
       And I follow "Kickstart" in the left menu
       And I follow "Kickstart Snippets" in the left menu
     Then I should see a "Kickstart Snippets" text
      And I should see a "No kickstart snippets found." text
-     And I should see a "create new snippet" link
-     And I should see a "Default Snippets" link in element "content-nav"
-     And I should see a "Custom Snippets" link in element "content-nav"
-     And I should see a "All Snippets" link in element "content-nav"
-
-  @manager16
-  Scenario: Check sidebar link destination for Systems => Kickstart => Kickstart Snippets
-    Given I am on the Systems page
-      And I follow "Kickstart" in the left menu
-      And I follow "Autoinstallation Snippets" in the left menu
-    Then I should see a "Autoinstallation Snippets" text
-     And I should see a "No autoinstallation snippets found." text
      And I should see a "create new snippet" link
      And I should see a "Default Snippets" link in element "content-nav"
      And I should see a "Custom Snippets" link in element "content-nav"
@@ -419,7 +374,7 @@ Feature: Explore the main landing page
       And I click on "Update"
     Then file "/srv/tftpboot/pxelinux.cfg/default" contains "kernel_option2=a_value2"
 
-   @cobbler_ui @manager12
+   @cobbler_ui
    Scenario: checking default snippets
      Given I am on the Systems page
       And I follow "Autoinstallation" in the left menu
@@ -428,17 +383,7 @@ Feature: Explore the main landing page
       And I follow "spacewalk/sles_no_signature_checks"
     Then I should see a "<signature-handling>" text
 
-   @cobbler_ui @manager16
-   Scenario: checking default snippets
-     Given I am on the Systems page
-      And I follow "Autoinstallation" in the left menu
-      And I follow "Autoinstallation Snippets" in the left menu
-      And I follow "Default Snippets"
-      And I click on "Next Page"
-      And I follow "spacewalk/sles_no_signature_checks"
-    Then I should see a "<signature-handling>" text
-
-   @cobbler_ui @manager12
+   @cobbler_ui
    Scenario: create a snippet
      Given I am on the Systems page
       And I follow "Autoinstallation" in the left menu
@@ -450,18 +395,7 @@ Feature: Explore the main landing page
       And I click on "Create Snippet"
    Then I should see a "created_test_snippet created successfully." text
 
-   @cobbler_ui @manager16
-   Scenario: create a snippet
-     Given I am on the Systems page
-      And I follow "Autoinstallation" in the left menu
-      And I follow "Autoinstallation Snippets" in the left menu
-      And I follow "create new snippet"
-      And I enter "created_test_snippet" as "name"
-      And I enter "<test_element>a text string</test_element>" as "contents"
-      And I click on "Create Snippet"
-   Then I should see a "created_test_snippet created successfully." text
-
-   @cobbler_ui @manager12
+   @cobbler_ui
    Scenario: delete a snippet (requires "create a snippet" test was run)
      Given I am on the Systems page
       And I follow "Autoinstallation" in the left menu
@@ -471,17 +405,7 @@ Feature: Explore the main landing page
       And I click on "Delete Snippet"
    Then I should see a "created_test_snippet deleted successfully." text
 
-   @cobbler_ui @manager16
-   Scenario: delete a snippet (requires "create a snippet" test was run)
-     Given I am on the Systems page
-      And I follow "Autoinstallation" in the left menu
-      And I follow "Autoinstallation Snippets" in the left menu
-      And I follow "created_test_snippet"
-      And I follow "delete snippet"
-      And I click on "Delete Snippet"
-   Then I should see a "created_test_snippet deleted successfully." text
-
-   @pxe_env @manager12
+   @pxe_env
    Scenario: testing for pxe environment files. Requires cobbler_ui tests to have run
      Given cobblerd is running
      Then file "/srv/tftpboot/pxelinux.cfg/default" exists on server
@@ -489,15 +413,5 @@ Feature: Explore the main landing page
       And file "/srv/tftpboot/pxelinux.cfg/default" contains "ks=.*fedora_kickstart_profile_upload:1"
       And file "/srv/tftpboot/images/fedora_kickstart_distro:1:SpacewalkDefaultOrganization/initrd.img" exists on server
       And file "/srv/tftpboot/images/fedora_kickstart_distro:1:SpacewalkDefaultOrganization/vmlinuz" exists on server
-
-   @pxe_env @manager16
-   Scenario: testing for pxe environment files. Requires cobbler_ui tests to have run
-     Given cobblerd is running
-     Then file "/srv/tftpboot/pxelinux.cfg/default" exists on server
-      And file "/srv/tftpboot/pxelinux.cfg/default" contains "ks=.*fedora_kickstart_profile:1"
-      And file "/srv/tftpboot/pxelinux.cfg/default" contains "ks=.*fedora_kickstart_profile_upload:1"
-      And file "/srv/tftpboot/images/fedora_kickstart_distro:1:Novell/initrd.img" exists on server
-      And file "/srv/tftpboot/images/fedora_kickstart_distro:1:Novell/vmlinuz" exists on server
-
 
 
