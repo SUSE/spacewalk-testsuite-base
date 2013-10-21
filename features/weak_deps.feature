@@ -30,13 +30,16 @@ Feature: Test weak dependencies
     Then I should see a "Recommends" text
      And I should see a "Suggests" text
      And I should see a "Supplements" text
+     And I should see a "Enhances" text
      And I should see a "packageand(kernel-default:oracleasm-kmp)" text
+     And I should see a "kernel-default" text
 
-  Scenario: Check local metdata for weak deps
+  Scenario: Check local metdata for weak deps (bnc 846436)
     Given I am root
      When I refresh the metadata
      Then I should have 'rpm:recommends.*rpcbind.*rpm:recommends' in the metadata
       And I should have 'rpm:supplements.*packageand.kernel-default:kernel-source.*rpm:supplements' in the metadata
+      And I should have 'rpm:enhances.*kernel-default.*rpm:enhances' in the metadata
 
 
 
