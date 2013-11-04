@@ -36,7 +36,7 @@ Feature: Adding repository to a channel
      And I follow "Channels"
      And I follow "Manage Software Channels" in the left menu
      And I follow "SLES11-SP2-Updates x86_64 Channel"
-     And I follow "Repositories"
+     And I follow "Repositories" in class "content-nav"
     When I check "SLES11-SP2-Updates-x86_64" in the list
      And I click on "Update Repositories"
     Then I should see a "SLES11-SP2-Updates x86_64 Channel repository information was successfully updated" text
@@ -46,7 +46,7 @@ Feature: Adding repository to a channel
      And I follow "Channels"
      And I follow "Manage Software Channels" in the left menu
      And I follow "SLES11-SP2-Updates x86_64 Channel"
-     And I follow "Repositories"
+     And I follow "Repositories" in class "content-nav"
      And I follow "Sync"
     When I click on "Sync Now"
     Then I should see a "Repository sync scheduled for SLES11-SP2-Updates x86_64 Channel." text
@@ -68,7 +68,7 @@ Feature: Adding repository to a channel
      And I follow "Channels"
      And I follow "Manage Software Channels" in the left menu
      And I follow "SLES11-SP2-Updates i586 Channel"
-     And I follow "Repositories"
+     And I follow "Repositories" in class "content-nav"
     When I check "SLES11-SP2-Updates-i586" in the list
      And I click on "Update Repositories"
     Then I should see a "SLES11-SP2-Updates i586 Channel repository information was successfully updated" text
@@ -78,7 +78,7 @@ Feature: Adding repository to a channel
      And I follow "Channels"
      And I follow "Manage Software Channels" in the left menu
      And I follow "SLES11-SP2-Updates i586 Channel"
-     And I follow "Repositories"
+     And I follow "Repositories" in class "content-nav"
      And I follow "Sync"
     When I click on "Sync Now"
     Then I should see a "Repository sync scheduled for SLES11-SP2-Updates i586 Channel." text
