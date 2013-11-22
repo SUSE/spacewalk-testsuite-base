@@ -14,7 +14,7 @@ outputfile = ENV.has_key?('RUNID') ? "#{ENV["RUNID"]}-cucumber-results_#{ENV["AR
 Dir.glob(File.join(Dir.pwd, 'run_sets', '*.yml')).each do |entry|
   namespace :cucumber do
     Cucumber::Rake::Task.new(File.basename(entry, '.yml').to_sym) do |t|
-      cucumber_opts = %w{--format pretty --format html -o #{outputfile}}
+      cucumber_opts = %W{--format pretty --format html -o #{outputfile}}
       features = YAML::load(File.read(entry))
       t.cucumber_opts = cucumber_opts + features
     end
