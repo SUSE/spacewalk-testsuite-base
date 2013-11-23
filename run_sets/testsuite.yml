@@ -24,6 +24,8 @@
 - features/configuration.feature
 - features/add_system_to_conf.feature
 - features/walk_hrefs.feature
+- features/openscap_audit.feature
+- features/ncc-sync-channels.feature
 - features/check_errata-npn.feature
 - features/cve_audit.feature
 - features/xmlrpc_cve_audit.feature
@@ -41,8 +43,6 @@
 - features/clone_channel-npn.feature
 - features/monitoring2.feature
 - features/test_config_channel.feature
-- features/openscap_audit.feature
-- features/ncc-sync-channels.feature
 - features/systemspage2.feature
 - features/xmlrpc_system.feature
 - features/delete_system_profile.feature
