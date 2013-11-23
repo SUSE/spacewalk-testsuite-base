@@ -10,3 +10,4 @@ Feature: All HREFs are accessible
   Scenario: Walking the HREFs
     Given I am authorized
     Then no link should be broken
+     And I wait for "200" seconds
