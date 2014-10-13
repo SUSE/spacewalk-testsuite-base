@@ -5,6 +5,10 @@ When /^I execute ncc\-sync "([^"]*)"$/ do |arg1|
   $command_output = sshcmd("mgr-ncc-sync #{arg1}")[:stdout]
 end
 
+When /^I execute mgr\-sync "([^"]*)"$/ do |arg1|
+  $command_output = sshcmd("mgr-sync #{arg1}")[:stdout]
+end
+
 When /^I execute mgr\-bootstrap "([^"]*)"$/ do |arg1|
   arch=`uname -m`
   arch.chomp!
@@ -41,6 +45,14 @@ When /^file "([^"]*)" contains "([^"]*)"$/ do |arg1, arg2|
   unless output[:stderr].empty?
     $stderr.write("-----\n#{output[:stderr]}\n-----\n")
     raise "#{arg2} not found in File #{arg1}"
+  end
+end
+
+When /^file "([^"]*)" doesn't contain "([^"]*)"$/ do |arg1, arg2|
+  output = sshcmd("grep #{arg2} #{arg1}", ignore_err: true)
+  if output[:stdout].empty?
+    sshcmd("echo 'mgrsync.user = admin' >> #{arg1}")
+    sshcmd("echo 'mgrsync.password = admin' >> #{arg1}")
   end
 end
 
@@ -144,4 +156,3 @@ Then /^I wont get "([^"]*)"$/ do |arg1|
     raise "'#{arg1}' found in output '#{$command_output}'"
   end
 end
-
