@@ -13,19 +13,16 @@ Feature: sm-mgr-sync scc migration, channel listing and enablement
       Then I want to get "SCC backend successfully migrated."
       And file "/var/lib/spacewalk/scc/migrated" exists on server
 
-  Scenario: list available channels
-     When I execute mgr-sync "list channels --compact"
-     Then I want to get "[ ] sles11-sp3-pool-x86_64"
-      And I want to get "    [ ] sle11-sdk-sp3-updates-x86_64"
-
-  Scenario: enable sles11-sp3-pool-x86_64
-     When I execute mgr-sync "add channel sles11-sp3-pool-x86_64"
-      And I execute mgr-sync "list channels --compact"
-     Then I want to get "[I] sles11-sp3-pool-x86_64"
-      And I want to get "    [ ] sles11-sp3-updates-x86_64"
-
-  Scenario: enable sles11-sp3-updates-x86_64
-     When I execute mgr-sync "add channel sles11-sp3-updates-x86_64"
-      And I execute mgr-sync "list channels --compact --expand"
+  Scenario: previously enabled channels are still enabled
+     When I execute mgr-sync "list channels --compact --expand"
      Then I want to get "[I] sles11-sp3-pool-x86_64"
       And I want to get "    [I] sles11-sp3-updates-x86_64"
+
+  Scenario: list available channels
+     When I execute mgr-sync "list channels --compact"
+     Then I want to get "[ ] sles12-pool-x86_64"
+
+  Scenario: enable sles12-pool-x86_64
+     When I execute mgr-sync "add channel sles12-pool-x86_64"
+      And I execute mgr-sync "list channels --compact"
+     Then I want to get "[I] sles12-pool-x86_64"
