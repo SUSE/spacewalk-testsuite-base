@@ -29,7 +29,7 @@ Scenario: searching for a known CVE number
     And I enter "3400" as "cveIdentifierId"
     And I click on "Audit systems"
   Then I should see this client as a link
-    And I should see a "Affected, patch available in an assigned channel" text in the "Patch status" column
+    And I should see a "Affected, at least one patch available in an assigned channel" text in the "Patch status" column
     And I should see a "Install a new patch in this system" link
     # Patch advisory suffix is architecture dependent: slessp2-kernel-664[8|1]
     And I should see a "Only candidate is: slessp2-kernel-664" text in the "Next Action" column
@@ -53,8 +53,8 @@ Scenario: selecting a system for the System Set Manager
     And I select "2012" from "cveIdentifierYear"
     And I enter "3400" as "cveIdentifierId"
     And I click on "Audit systems"
-    And I should see a "Affected, patch available in an assigned channel" text
-  When I check "Affected, patch available in an assigned channel" in the list
+    And I should see a "Affected, at least one patch available in an assigned channel" text
+  When I check "Affected, at least one patch available in an assigned channel" in the list
     Then I should see a "1 system selected" text
   When I follow "Manage"
      And I follow "Systems" in class "content-nav"
