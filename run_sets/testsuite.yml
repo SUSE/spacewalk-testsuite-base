@@ -47,7 +47,6 @@
 - features/openscap_audit.feature
 - features/ncc-sync-channels.feature
 - features/systemspage2.feature
-- features/mgr-sync_scc_migration.feature
 - features/xmlrpc_system.feature
 - features/nagios.feature
 - features/systems_needing_reboot.feature
@@ -65,6 +64,7 @@
 - features/xmlrpc_activationkey.feature
 - features/xmlrpc_channel.feature
 - features/setup_wizard.feature
+- features/mgr-sync_scc_migration.feature
 - features/change_password.feature
 - features/spacewalk-debug.feature
 - features/tomcat_errors.feature
