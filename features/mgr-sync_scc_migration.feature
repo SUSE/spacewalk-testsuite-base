@@ -8,7 +8,8 @@ Feature: sm-mgr-sync scc migration, channel listing and enablement
 
   Scenario: migrate to scc
      Given file "/root/.mgr-sync" exists on server
-      And file "/root/.mgr-sync" doesn't contain "mgrsync.user"
+     And file "/root/.mgr-sync" doesn't contain "mgrsync.user"
+     And SCC feature is enabled
      When I execute mgr-sync "enable-scc"
       Then I want to get "SCC backend successfully migrated."
       And file "/var/lib/spacewalk/scc/migrated" exists on server

@@ -9,6 +9,10 @@ When /^I execute mgr\-sync "([^"]*)"$/ do |arg1|
   $command_output = sshcmd("mgr-sync #{arg1}")[:stdout]
 end
 
+Given /^SCC feature is enabled$/ do
+    $command_output = sshcmd("touch /var/lib/spacewalk/scc/default_scc")[:stdout]
+end
+
 When /^I execute mgr\-bootstrap "([^"]*)"$/ do |arg1|
   arch=`uname -m`
   arch.chomp!
