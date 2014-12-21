@@ -4,6 +4,7 @@
 - features/login.feature
 - features/mainpage.feature
 - features/channels_add.feature
+- features/push_package.feature
 - features/create_repository.feature
 - features/systemspage.feature
 - features/create_activationkey.feature
