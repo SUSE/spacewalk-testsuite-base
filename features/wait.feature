@@ -5,4 +5,7 @@ Feature: To prevent race conditions
 
 Scenario: wait to workaround race conditions 
      When I wait for "120" seconds
+      And I wait for "120" seconds
+      And I wait for "120" seconds
+      And I wait for "120" seconds
 
