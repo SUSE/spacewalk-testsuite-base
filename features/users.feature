@@ -15,4 +15,5 @@ Feature: Check users page/tab
         And I should see a "Deactivated" link in the left menu
         And I should see a "All" link in the left menu
         And I should see 2 "admin" links
+        And I should see a "Admin" link
         And I should see a "Download CSV" link
