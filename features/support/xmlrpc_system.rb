@@ -47,7 +47,7 @@ class XMLRPCSystemTest < XMLRPCBaseTest
     begin
       ret = @connection.call("system.createSystemRecord", @sid, sysName, ksLabel, "", "", netdevs)
     rescue Exception => ex
-      puts "Ouch: " + ex
+      puts "Ouch: #{ex}"
       return false
     end
 
