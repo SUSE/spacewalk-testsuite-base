@@ -14,6 +14,10 @@ Feature: I want to setup the proxy appliance
       And I check "provisioning_entitled" 
       And I click on "Create Activation Key"
       And I should see a "Activation key SUSE proxy appliance has been created." text
+      And I follow "Child Channels" in the content area
+      And I select "SUSE-Manager-Proxy-2.1-Updates for x86_64" from "childChannels"
+      And I click on "Update Key"
+      Then I should see a "Activation key SUSE proxy appliance has been modified" text
 
   Scenario: I run the proxy setup
     When I register the proxy
