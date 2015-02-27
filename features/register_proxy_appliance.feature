@@ -23,6 +23,10 @@ Feature: I want to setup the proxy appliance
     When I register the proxy
     And I copy the ssl certs
     And I run the proxy setup
-    Then I should be registered
-    
-
+  
+  Scenario: The proxy should be setup and registered
+    Given I am on the Systems page
+      And I follow "Systems" in the left menu
+      And I follow "Proxy" in the left menu
+      And I should see a proxy link in the content area
+      Then I should be setup

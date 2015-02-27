@@ -23,7 +23,9 @@ Then /^I copy the ssl certs$/ do
 end
 
 
-Then /^I should be registered$/ do
+Then /^I should be setup$/ do
+  sshcmd('pgrep squid', host: ENV['PROXY_APP']) 
+  sshcmd('test -x /etc/sysconfig/rhn/systemid', host: ENV['PROXY_APP']) 
 end
 
 Then /^I rehash the certificates$/ do
@@ -33,3 +35,6 @@ Then /^I rehash the certificates$/ do
   sshcmd(rehash_cmd, host: ENV['PROXY_APP'])
 end
 
+Then /^I should see a proxy link in the content area$/ do
+  step "I should see a \"#{ENV['PROXY_APP']}\" link in the content area"
+end
