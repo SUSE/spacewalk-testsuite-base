@@ -17,7 +17,7 @@ end
 Then /^I copy the ssl certs$/ do
   certs = "/root/ssl-build/{RHN-ORG-PRIVATE-SSL-KEY,RHN-ORG-TRUSTED-SSL-CERT,rhn-ca-openssl.cnf}"
   dest = "/root/ssl-build"
-  scpcmd = "scp -o StrictHostKeyChecking=no '#{ENV['TESTHOST']}:#{certs}' #{dest}"
+  scpcmd = "scp -o StrictHostKeyChecking=no '#{ENV['TESTHOST']}:#{certs}' #{dest} &> /dev/null"
   sshcmd("mkdir /root/ssl-build", host: ENV['PROXY_APP'])
   sshcmd(scpcmd, host: ENV['PROXY_APP'])
 end
