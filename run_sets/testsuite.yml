@@ -10,6 +10,7 @@
 - features/create_repository.feature
 - features/systemspage.feature
 - features/create_activationkey.feature
+- features/register_proxy_appliance.feature
 - features/users.feature
 - features/users-createnewuser.feature
 - features/users-userdetails.feature
