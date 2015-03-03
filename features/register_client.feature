@@ -8,7 +8,7 @@ Feature: Register a client
 
   Scenario: Register a client
     Given I am root
-    When I register using an activation key
+    When I register using an activation key through a "server"
     Then I should see this client in spacewalk
 
    @pxe_env
