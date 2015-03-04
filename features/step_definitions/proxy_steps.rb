@@ -38,3 +38,17 @@ end
 Then /^I should see a proxy link in the content area$/ do
   step "I should see a \"#{ENV['PROXY_APP']}\" link in the content area"
 end
+
+Then /^I remove the "([^"]*)" package$/ do |pkg|
+  $command_output = `zypper --non-interactive rm #{pkg}`
+  if ! $?.success?
+    raise "Removing package #{pkg} failed"
+  end  
+end
+
+Then /^I verify the proxy cache$/ do
+  squid_log = "/var/log/squid/access.log"
+  cmd = "grep 'TCP_MEM_HIT/200' #{squid_log}"
+  out = sshcmd(cmd, host: ENV['PROXY_APP'], ignore_err: true)
+  fail if ! out[:stdout].include? "hoag-dummy"
+end
