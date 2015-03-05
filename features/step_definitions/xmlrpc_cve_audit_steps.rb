@@ -15,8 +15,9 @@ When /^I call audit.listSystemsByPatchStatus with CVE identifier "([^\"]*)"$/ do
   result_list = rpctest.listSystemsByPatchStatus(cve_identifier)
 end
 
-Then /^I should get status "([^\"]+)" for system "([0-9]+)"$/ do |status, system|
-  result = result_list.select {|result| result["system_id"] == system.to_i}
+Then /^I should get status "([^\"]+)" for this system$/ do |status|
+  system_id = client_system_id_to_i
+  result = result_list.select {|result| result["system_id"] == system_id}
 
   fail if result.empty?
   result = result[0]
