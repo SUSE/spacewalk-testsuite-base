@@ -2,6 +2,7 @@
 - features/init_user_create.feature
 - features/setup_http_proxy.feature
 - features/running.feature
+- features/add_proxy_channels.feature
 - features/login.feature
 - features/mainpage.feature
 - features/channels_add.feature
@@ -50,7 +51,6 @@
 - features/systemspage2.feature
 - features/xmlrpc_system.feature
 - features/nagios.feature
-- features/add_proxy_channels.feature
 - features/systems_needing_reboot.feature
 - features/test_reboot.feature
 #- features/walk_hrefs.feature
