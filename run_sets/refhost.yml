@@ -18,3 +18,4 @@
 - features/install_errata-npn.feature
 - features/ncc-sync-channels-refhost.feature
 - features/clone_channel-npn.feature
+- features/mgr-sync_scc_migration.feature
