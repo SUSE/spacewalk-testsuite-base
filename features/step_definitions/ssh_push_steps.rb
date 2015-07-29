@@ -1,4 +1,4 @@
-# Copyright (c) 2013 Novell, Inc.
+# Copyright (c) 2015 SUSE LLC
 # Licensed under the terms of the MIT license.
 
 When /^I register this client for SSH push via tunnel$/ do
@@ -25,3 +25,7 @@ When /^I register this client for SSH push via tunnel$/ do
   FileUtils.mv('/etc/sysconfig/rhn/up2date.BACKUP', '/etc/sysconfig/rhn/up2date')
 end
 
+When /^I register this client via sudo and ssh push$/ do
+  cmd = "mgr-ssh-push-init --client #{$myhostname} --register /srv/www/htdocs/pub/bootstrap/bootstrap-ssh-push.sh"
+  sshcmd(cmd, ignore_err: true)
+end

@@ -42,3 +42,21 @@ Feature: Register a system to be managed via SSH push
     Given I am on the Systems overview page of this client
      Then I should see a "Push via SSH tunnel" text
 
+  Scenario: Create bootstrap script for SSH push without tunnel
+    When I execute mgr-bootstrap "--activation-keys=1-ssh-push --script=bootstrap-ssh-push.sh --no-up2date"
+    Then I want to get "* bootstrap script (written):"
+    And I want to get "    '/srv/www/htdocs/pub/bootstrap/bootstrap-ssh-push.sh'"
+
+  Scenario: Delete a system profile
+    Given I am on the Systems overview page of this client
+    When I follow "Delete System"
+    And I should see a "Confirm System Profile Deletion" text
+    And I click on "Delete Profile"
+    Then I should see that this system has been deleted
+
+  Scenario: I want to register via the ssh push init script with sudo
+    When I register this client via sudo and ssh push
+
+  Scenario: Check this client's contact method without tunnel
+    Given I am on the Systems overview page of this client
+    Then I should see a "Push via SSH" text
