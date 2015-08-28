@@ -8,7 +8,6 @@ Feature: Test Powermanagement
       And I follow "Provisioning" in the content area
       And I follow "Power Management" in the content area
      Then I should see a "Power Management Settings" text
-      And I should see a "IPMI" text
       And I should see a "Save" button
   
   Scenario: Save powermanagement values
