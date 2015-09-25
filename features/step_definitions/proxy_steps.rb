@@ -42,7 +42,7 @@ end
 Then /^I remove the "([^"]*)" package$/ do |pkg|
   $command_output = `zypper --non-interactive rm #{pkg}`
   if ! $?.success?
-    raise "Removing package #{pkg} failed"
+    puts "Removing package #{pkg} failed"
   end  
 end
 

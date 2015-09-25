@@ -4,7 +4,8 @@
 Feature: Install a package to the client via the proxy
 
   Scenario: Install a package to the client via the proxy
-    Given I am on the Systems overview page of this client
+    Given I remove the "hoag-dummy" package
+    Then I am on the Systems overview page of this client
      And I follow "Software" in the content area
      And I follow "Install"
     When I check "hoag-dummy-1.1-2.1" in the list
