@@ -6,7 +6,9 @@ Then /^I register the proxy$/ do
   #download certificate and silence output
   sshcmd("wget #{cert} -O #{dest} -o /dev/null", host: ENV['PROXY_APP'])
   step 'I rehash the certificates'
-  sshcmd("rhnreg_ks #{url} #{act_key}", host: ENV['PROXY_APP'])
+  out = sshcmd("rhnreg_ks #{url} #{act_key}", host: ENV['PROXY_APP'])
+  puts "stdout was: #{out[:stdout]}"
+  puts "stderr was: #{out[:stderr]}"
 end
 
 Then /^I run the proxy setup$/ do
