@@ -15,6 +15,7 @@ Feature: Check errata
   Scenario: check sles-release-6789 errata
     Given I am on the errata page
      When I follow "All" in the left menu
+      And I click on "Next Page"
      When I follow "andromeda-dummy-6789"
      Then I should see a "andromeda-dummy-6789 - Bug Fix Advisory" text
       And I should see a "Test update for andromeda-dummy" text
@@ -25,6 +26,7 @@ Feature: Check errata
   Scenario: check sles-release-6789 errata packages
     Given I am on the errata page
      When I follow "All" in the left menu
+      And I click on "Next Page"
      When I follow "andromeda-dummy-6789"
      When I follow "Packages"
      Then I should see a "SLES11-SP3-Updates x86_64 Channel" link
