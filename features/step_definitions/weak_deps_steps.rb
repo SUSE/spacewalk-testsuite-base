@@ -11,7 +11,7 @@ When(/^I refresh the metadata$/) do
 end
 
 Then(/^I should have '([^']*)' in the metadata$/) do |text|
-  arch=`uname -m`
+  arch = `uname -m`
   arch.chomp!
   if arch != "x86_64"
     arch = "i586"
@@ -22,7 +22,7 @@ Then(/^I should have '([^']*)' in the metadata$/) do |text|
 end
 
 Then(/^I should not have '([^']*)' in the metadata$/) do |text|
-  arch=`uname -m`
+  arch = `uname -m`
   arch.chomp!
   if arch != "x86_64"
     arch = "i586"
@@ -33,16 +33,16 @@ Then(/^I should not have '([^']*)' in the metadata$/) do |text|
 end
 
 Then(/^"([^"]*)" should exists in the metadata$/) do |file|
-  arch=`uname -m`
+  arch = `uname -m`
   arch.chomp!
   if arch != "x86_64"
     arch = "i586"
   end
-  fail if not  file_exist($server, "#{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/#{file}")
+  fail unless file_exist($server, "#{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/#{file}")
 end
 
 Then(/^I should have '([^']*)' in the patch metadata$/) do |text|
-  arch=`uname -m`
+  arch = `uname -m`
   arch.chomp!
   if arch != "x86_64"
     arch = "i586"
