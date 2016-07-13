@@ -2,9 +2,8 @@
 # Licensed under the terms of the MIT license.
 
 When(/^I refresh the metadata$/) do
-  sshcmd("rhn_check -vvv 2>&1")
-  code = sshcmd("echo $?")
-    if code != 0
+  output = `rhn_check -vvv 2>&1`
+    unless $?.success?
       raise "rhn_check failed: #{$!}: #{output}"
     end
   client_refresh_metadata
@@ -16,9 +15,8 @@ Then(/^I should have '([^']*)' in the metadata$/) do |text|
   if arch != "x86_64"
     arch = "i586"
   end
-  cmd = "zgrep '#{text}' #{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/primary.xml.gz"
-  _out, _local, _remote, code = $server.test_and_store_results_together(cmd, "root", 500)
-  fail if code != 0
+  `zgrep '#{text}' #{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/primary.xml.gz`
+  fail unless $?.success?
 end
 
 Then(/^I should not have '([^']*)' in the metadata$/) do |text|
@@ -27,9 +25,8 @@ Then(/^I should not have '([^']*)' in the metadata$/) do |text|
   if arch != "x86_64"
     arch = "i586"
   end
-  cmd = "zgrep '#{text}' #{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/primary.xml.gz"
-  _out, _local, _remote, code = $server.test_and_store_results_together(cmd, "root", 500)
-  fail if code != 0
+  `zgrep '#{text}' #{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/primary.xml.gz`
+  fail if $?.success?
 end
 
 Then(/^"([^"]*)" should exists in the metadata$/) do |file|
@@ -38,7 +35,7 @@ Then(/^"([^"]*)" should exists in the metadata$/) do |file|
   if arch != "x86_64"
     arch = "i586"
   end
-  fail unless file_exist($server, "#{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/#{file}")
+  fail unless File.exist?("#{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/#{file}")
 end
 
 Then(/^I should have '([^']*)' in the patch metadata$/) do |text|
@@ -47,7 +44,6 @@ Then(/^I should have '([^']*)' in the patch metadata$/) do |text|
   if arch != "x86_64"
     arch = "i586"
   end
-  cmd = "zgrep '#{text}' #{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/updateinfo.xml.gz"
-  _out, _local, _remote, code = $server.test_and_store_results_together(cmd, "root", 500)
-  fail if code != 0
+  `zgrep '#{text}' #{client_raw_repodata_dir("sles11-sp3-updates-#{arch}-channel")}/updateinfo.xml.gz`
+  fail unless $?.success?
 end

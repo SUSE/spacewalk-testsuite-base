@@ -26,7 +26,8 @@ World(MiniTest::Assertions)
 
 # basic support for rebranding of strings in the UI
 BRANDING = ENV['BRANDING'] || 'suse'
-DEFAULT_TIMEOUT = 100
+
+DEFAULT_TIMEOUT = 20
 
 # Returns current url
 def current_url
@@ -73,7 +74,8 @@ if host.include?("//")
 end
 host = "https://#{host}"
 
-$myhostname = host
+$myhostname = `hostname -f`
+$myhostname.chomp!
 
 ENV['LANG'] = "en_US.UTF-8"
 ENV['IGNORECERT'] = "1"
@@ -91,7 +93,6 @@ when :phantomjs
                                                              '--ssl-protocol=TLSv1',
                                                              '--web-security=false'],
                                       :js_errors => false,
-                                      :timeout => 200,
                                       :debug => false)
   end
   Capybara.default_driver = :poltergeist

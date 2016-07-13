@@ -8,4 +8,3 @@ gem "rubyzip"
 gem 'owasp_zap'
 gem 'net-ssh'
 gem 'jwt'
-gem 'twopence'

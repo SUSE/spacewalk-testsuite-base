@@ -20,8 +20,7 @@ Given(/^I am logged in via XML\-RPC\/actionchain as user "(.*?)" and password "(
 
     servers = sysrpc.listSystems
     refute_nil(servers)
-
-    hostname = $client_hostname
+    hostname = Socket.gethostbyname(Socket.gethostname).first # Needs proper DNS!
     $client_id = servers
                 .select { |s| s['name'] == hostname }
                 .map { |s| s['id'] }.first
