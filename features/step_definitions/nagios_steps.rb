@@ -18,9 +18,9 @@ end
 
 Then(/^I should see WARNING: 1 patch pending$/) do
   command = "grep \"WARNING: 1 patch(es) pending\" /tmp/nagios.out"
-  output, local, remote, code = $server.test_and_store_results_together(command, "root", 600)
+  output, _local, _remote, code = $server.test_and_store_results_together(command, "root", 600)
   if code != 0
-    run_cmd($server, "cat /tmp/nagios.out", 600)
+    output, _local, _remote, _code = run_cmd($server, "cat /tmp/nagios.out", 600)
     raise "Nagios check patches failed '#{command}' #{$!}: #{output}"
   end
 end

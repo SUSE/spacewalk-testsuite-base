@@ -29,10 +29,10 @@ end
 
 def client_system_id
   out, _local, _remote, _code = $client.test_and_store_results_together("grep \"system_id\" /etc/sysconfig/rhn/systemid", "root", 600)
-  puts out
+   puts out
 end
 
 def client_system_id_to_i
-  out, _local, _remote, _code = $client.test_and_store_results_together("grep \"system_id\" /etc/sysconfig", "root", 600)
-  puts out
+  out, _local, _remote, _code = $client.test_and_store_results_together("grep \"ID\" /etc/sysconfig/rhn/systemid | tr -d -c 0-9", "root", 600)
+  puts out.to_i
 end

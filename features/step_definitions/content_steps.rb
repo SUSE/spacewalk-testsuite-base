@@ -244,9 +244,9 @@ Then(/^I should see a "([^"]*)" editor in "([^"]*)" form$/) do |arg1, arg2|
 end
 
 Then(/^"([^"]*)" is installed$/) do |package|
-  code = run_cmd($client, "rpm -q #{package} 2>&1", 600)
+  out, _external, _local, code = run_cmd($client, "rpm -q #{package} 2>&1", 600)
   if code != 0
-     raise "exec rpm failed (Code #{code}:"
+     raise "exec rpm failed (Code #{out}:"
   end
 end
 

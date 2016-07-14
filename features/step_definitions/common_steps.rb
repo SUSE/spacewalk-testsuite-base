@@ -18,7 +18,7 @@ end
 Then(/^I download the SSL certificate$/) do
   # download certicate on the client from the server via ssh protocol
   cert_path = "/usr/share/RHN-ORG-TRUSTED-SSL-CERT"
-  local, _remote, command = $client.test_and_print_results("curl -S -k -o #{cert_path} http://#{server}/pub/RHN-ORG-TRUSTED-SSL-CERT", "root", 500)
+  local, _remote, command = $client.test_and_print_results("curl -S -k -o #{cert_path} http://#{$server_ip}/pub/RHN-ORG-TRUSTED-SSL-CERT", "root", 500)
   if command != 0 && local != 0 && remote != 0
     raise "fail to download the ssl certificate"
   end

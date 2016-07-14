@@ -10,7 +10,7 @@ Given(/^I am testing configuration$/) do
     )
 end
 
-When(/^I change the _local file "([^"]*)" to "([^"]*)"$/) do |filename, content|
+When(/^I change the local file "([^"]*)" to "([^"]*)"$/) do |filename, content|
     out, _local, _remote, code = $client.test_and_store_results_together("echo \"#{content}\" > #{filename}", "root", 600)
     puts out
     if code != 0
