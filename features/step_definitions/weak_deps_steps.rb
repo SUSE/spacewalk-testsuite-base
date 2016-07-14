@@ -2,7 +2,7 @@
 # Licensed under the terms of the MIT license.
 
 When(/^I refresh the metadata$/) do
-  cmd("rhn_check -vvv 2>&1")
+  cmd = "rhn_check -vvv 2>&1"
   out, _local, _remote, code = $client.test_and_store_results_together(cmd, "root", 500)
    if code != 0
      raise "rhn_check failed: #{$!}: #{out}"

@@ -9,7 +9,7 @@ When(/^I wait for "(\d+)" seconds$/) do |arg1|
 end
 
 When(/^I run rhn_check on this client$/) do
-  output, _local, _remote, code = $client.test_and_store_results_together("rhn_check -vvv")
+  output, _local, _remote, code = $client.test_and_store_results_together("rhn_check -vvv", "root", 400)
   if code != 0
       raise "rhn_check failed: #{$!}: #{output}"
   end
