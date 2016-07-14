@@ -10,12 +10,8 @@ When(/^I register this client for SSH push via tunnel$/) do
   bootstrap = '/srv/www/htdocs/pub/bootstrap/bootstrap-ssh-push-tunnel.sh'
   expect_file = ExpectFileGenerator.new("#{$client_ip}", bootstrap)
   step "I copy to server \"" + expect_file.path + "\""
-  filename = expect_file.path
+  filename = expect_file.filename
   # Perform the registration
-  out, _local, _remote, code = $server.test_and_store_results_together("mv #{filename} /tmp", "root", 600)
-  if code != 0
-    raise "Execute command failed: #{out}"
-  end
   command = "expect #{filename}"
   _out, _local, _remote, code = $server.test_and_store_results_together(command, "root", 600)
   if code != 0

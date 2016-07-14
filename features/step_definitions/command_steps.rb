@@ -118,10 +118,10 @@ end
 
 When(/^I execute spacewalk\-channel and pass "([^"]*)"$/) do |arg1|
   command = "spacewalk-channel #{arg1}"
-  output, _local, _remote, code = $client.test_and_store_results_together(command, "root", 600)
-  puts output
+  $command_output, _local, _remote, code = $client.test_and_store_results_together(command, "root", 600)
+  puts $command_output
   if code != 0
-    raise "spacewalk-channel with #{arg1} command failed #{output}"
+    raise "spacewalk-channel with #{arg1} command failed #{$command_output}"
   end
 end
 
