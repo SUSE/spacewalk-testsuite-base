@@ -93,6 +93,14 @@ def post_install_server():
 	# files needed for tests
 	runOrRaise(server, "mv  /var/lib/slenkins/tests-suse-manager/tests-server/pub/* /srv/www/htdocs/pub/", "move to pub", 900)
 	runOrRaise(server, "mv  /var/lib/slenkins/tests-suse-manager/tests-server/vCenter.json /tmp/", "move to pub", 900)
+
+def check_client_log():
+	''' verify log'''
+	journal.beginGroup("Post verification for CLIENT")
+	run_cmd(client, "grep \"Traceback\" /var/log/up2date && cat /var/log/up2date && exit 1", "testing up2date client log", 300)
+
+
+
 ###################################### MAIN ################################################################################
 try:
     # change hostname, and move the install(fedora kernel, etc) dir to /
@@ -110,6 +118,8 @@ try:
     
     journal.beginGroup("running cucumber-suite on jail")
     run_all_feature() 
+
+    check_client_log()
 
 except susetest.SlenkinsError as e:
     journal.writeReport()
