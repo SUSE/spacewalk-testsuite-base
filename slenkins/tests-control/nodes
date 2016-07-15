@@ -12,7 +12,10 @@ node          client
 repository    ${CHANNEL_GALAXY_CLIENT}
 repository    ${CHANNEL_SLENKINS_CLIENT}
 repository    ${CHANNEL_UPDATES_CLIENT}
-repository    http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/SLE_12_SP1/Devel:Galaxy:Manager:Head.repo
+
+# devel galaxy
+# repository    http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/SLE_12_SP1/Devel:Galaxy:Manager:Head.repo
+
 # this repo is for tests-packages like andromeda dummy, etc needed by cucumber tests.
 repository    http://download.suse.de/ibs/Devel:/Galaxy:/BuildRepo/SLE_12_SP1/Devel:Galaxy:BuildRepo.repo
 install       tests-suse-manager-tests-client
