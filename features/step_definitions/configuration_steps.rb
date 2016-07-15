@@ -12,10 +12,11 @@ end
 
 When(/^I change the local file "([^"]*)" to "([^"]*)"$/) do |filename, content|
     out, _local, _remote, code = $client.test_and_store_results_together("echo \"#{content}\" > #{filename}", "root", 600)
-    puts out
     if code != 0
       raise "Execute command failed #{out} !"
     end
+    out, _local, _remote, _code = $client.test_and_store_results_together("cat #{filename}", "root", 600)
+    puts out
 end
 
 Then(/^I should see a table line with "([^"]*)", "([^"]*)", "([^"]*)"$/) do |arg1, arg2, arg3|

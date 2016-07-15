@@ -17,6 +17,7 @@ Then(/^I download the SSL certificate$/) do
   cert_path = "/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT"
   wget = "wget --no-check-certificate -o"
   _out, loc, rem, c = $client.test_and_print_results("#{wget} #{cert_path} http://#{$server_ip}/pub/RHN-ORG-TRUSTED-SSL-CERT", "root", 500)
+
   if c != 0 && loc != 0 && rem != 0
     raise "fail to download the ssl certificate"
   end
