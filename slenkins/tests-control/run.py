@@ -25,7 +25,7 @@ def setup():
     minion = config.target("minion")
 
 def client_setup():
-        init_client = ''' zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/3.0/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3;  zypper -n --gpg-auto-import-keys ref; 
+        init_client = ''' zypper ar http://dist.suse.de/install/SLP/SUSE-Manager-Tools-3-GM/x86_64/DVD1/ suma3-gmc-tools;  zypper -n --gpg-auto-import-keys ref; 
                         zypper -n in subscription-tools;
                         zypper -n in spacewalk-client-setup;
                         zypper -n in spacewalk-check; 
