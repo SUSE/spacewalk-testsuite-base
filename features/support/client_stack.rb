@@ -34,5 +34,5 @@ end
 
 def client_system_id_to_i
   out, _local, _remote, _code = $client.test_and_store_results_together("grep \"ID\" /etc/sysconfig/rhn/systemid | tr -d -c 0-9", "root", 600)
-  puts out.to_i
+  out.gsub(/\s+/, "")
 end
