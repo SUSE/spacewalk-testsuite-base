@@ -27,15 +27,15 @@ When(/^I execute mgr\-bootstrap "([^"]*)"$/) do |arg1|
 end
 
 When(/^I fetch "([^"]*)" from server$/) do |arg1|
-   output, _local, _remote, code = $client.test_and_store_results_together("wget http://FIXME/#{arg1}", "root", 600)
+   output, _local, _remote, code = $client.test_and_store_results_together("wget http://#{$server_ip}/#{arg1}", "root", 600)
    if code != 0
     raise "Execute command failed: #{$!}: #{output}"
   end
 end
 
 When(/^I execute "([^"]*)"$/) do |arg1|
-  output = `sh ./#{arg1} 2>&1`
-  unless $?.success?
+  output, _local, _remote, code = $client.test_and_store_results_together("sh ./#{arg1}")
+  if code != 0
     raise "Execute command (#{arg1}) failed(#{$?}): #{$!}: #{output}"
   end
 end

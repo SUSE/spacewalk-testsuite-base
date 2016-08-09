@@ -106,20 +106,18 @@ try:
     # change hostname, and move the install(fedora kernel, etc) dir to /
     setup_server()
     # change password to linux to all systems
-    for node in (server, client, minion): 
-    	run_cmd(node, SET_SUMAPWD, "change root pwd to linux")
+    [  run_cmd(node, SET_SUMAPWD, "change root pwd to linux") for node in (server, client, minion) ]
     # install some spacewalk packages on client
     client_setup()
     # run migration.sh script
     journal.beginGroup("init suma-machines")
     runOrRaise(server, SERVER_INIT,  "INIT_SERVER", 8000)
     post_install_server()
-
     
     journal.beginGroup("running cucumber-suite on jail")
     run_all_feature() 
 
-    check_client_log()
+#    check_client_log()
 
 except susetest.SlenkinsError as e:
     journal.writeReport()
