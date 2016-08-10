@@ -12,6 +12,11 @@ zypper ar http://dist.suse.de/install/SLP/SUSE-Manager-Server-3-GM/x86_64/DVD1/ 
 zypper -n --gpg-auto-import-keys ref
 zypper -n in --auto-agree-with-licenses -t pattern suma_server
 zypper -n in timezone
+
+zypper -n in subscription-tools
+zypper -n in spacewalk-check
+zypper -n in rhncfg-actions
+
 echo "+++++++++++++++++++++++"
 echo "installing packages ok"
 echo "+++++++++++++++++++++++"
