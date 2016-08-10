@@ -70,6 +70,17 @@ def post_install_server():
 	runOrRaise(server, "mv  /var/lib/slenkins/tests-suse-manager/tests-server/pub/* /srv/www/htdocs/pub/", "move to pub", 900)
 	runOrRaise(server, "mv  /var/lib/slenkins/tests-suse-manager/tests-server/vCenter.json /tmp/", "move to pub", 900)
 
+def check_cucumber():
+    journal.beginTest("check tests cucumber for failures")
+    output_cucumber = "$WORKSPACE/cucumber/output.html"
+    check = "grep \"scenarios (0 failed\" {}".format(output_cucumber)
+    if subprocess.call(check, shell=True) : 
+		journal.failure("FAIL : some tests of cucumber failed ! ")
+		return False
+    journal.success("all tests of cucumber are ok")
+    return True
+
+
 ###################################### MAIN ################################################################################
 try:
     # change hostname, and move the install(fedora kernel, etc) dir to /
@@ -86,7 +97,8 @@ try:
     # run cucumber suite 
     journal.beginGroup("running cucumber-suite on jail")
     run_all_feature() 
-
+    # check that all test are sucessufull (control node side)
+    check_cucumber()
 
 except susetest.SlenkinsError as e:
     journal.writeReport()
