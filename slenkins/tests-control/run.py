@@ -8,6 +8,7 @@ import susetest
 import suselog
 from susetest_api.assertions import *
 from susetest_api.files import *
+from susetest_api.machinery import *
 journal = None
 suite = "/var/lib/slenkins/tests-suse-manager"
 client = None
@@ -79,7 +80,6 @@ def check_cucumber():
 		return False
     journal.success("all tests of cucumber are ok")
     return True
-
 
 ###################################### MAIN ################################################################################
 try:
