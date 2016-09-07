@@ -33,8 +33,15 @@ def client_setup():
                         zypper -n in spacewalk-oscap; 
 			zypper -n in rhncfg-actions'''
         run_cmd(client, init_client, "init client", 600)
+
 	run_cmd(client, " zypper -n in andromeda-dummy milkyway-dummy virgo-dummy", "install dummy package needed by tests", 900)
         run_cmd(client, "echo \"{}     suma-server.example.com\" >> /etc/hosts;" .format(server.ipaddr), "setup host", 300)
+	# openscap packages needed for tests
+	#FIXME: why this packages are not in the tools repo? they are in the update repo .
+	update_repo = "zypper ar http://download.suse.de/ibs/SUSE/Updates/SUSE-Manager-Server/3.0/x86_64/update/SUSE:Updates:SUSE-Manager-Server:3.0:x86_64.repo ;"
+	run_cmd(client, update_repo + "zypper -n --gpg-auto-import-keys ref ;", "install openscap repo", 400)
+	openscap = [ "openscap-content", "openscap-extra-probes", "openscap-utils"]
+        [  run_cmd(node, "zypper -n in" + scap , "install" + scap) for scap in openscap ]
 def setup_server():		
 	change_hostname = "echo \"{}     suma-server.example.com\" >> /etc/hosts; echo \"suma-server.example.com\" > /etc/hostname;  hostname -f".format(server.ipaddr)
 	run_cmd(server, "hostname suma-server.example.com",  "change hostname ", 8000)
@@ -46,8 +53,6 @@ def setup_server():
 # MAIN 
 #####################
 setup()
-SET_SUMAPWD =  "chpasswd <<< \"root:linux\""
-SERVER_INIT= "/var/lib/slenkins/tests-suse-manager/tests-server/bin/suma_init.sh"
 
 run_cucumber_on_jail = "cp -R /var/lib/slenkins/tests-suse-manager/tests-control/cucumber/ $WORKSPACE; export CLIENT={}; export TESTHOST={}; export BROWSER=phantomjs; cd $WORKSPACE/cucumber; rake".format(client.ipaddr_ext, server.ipaddr_ext)
 
@@ -67,7 +72,6 @@ def post_install_server():
 	journal.success("done clobberd conf !")
 	run_cmd(server, "systemctl restart cobblerd.service && systemctl status cobblerd.service", "restarting cobllerd after configuration changes") 
 	# files needed for tests 
-	#FIXME this should be done on the packaging side, instead of here :)
 	runOrRaise(server, "mv  /var/lib/slenkins/tests-suse-manager/tests-server/pub/* /srv/www/htdocs/pub/", "move to pub", 900)
 	runOrRaise(server, "mv  /var/lib/slenkins/tests-suse-manager/tests-server/vCenter.json /tmp/", "move to pub", 900)
 
@@ -86,11 +90,21 @@ try:
     # change hostname, and move the install(fedora kernel, etc) dir to /
     setup_server()
     # change password to linux to all systems
+
+    SET_SUMAPWD =  "chpasswd <<< \"root:linux\""
     [  run_cmd(node, SET_SUMAPWD, "change root pwd to linux") for node in (server, client, minion) ]
     # install some spacewalk packages on client
+    run_cmd(server, " zypper ar http://download.suse.de/ibs/SUSE/Updates/SUSE-Manager-Server/3.0/x86_64/update/SUSE:Updates:SUSE-Manager-Server:3.0:x86_64.repo", "gmc-update repo")
+    run_cmd(server, "zypper -n --gpg-auto-import-keys ref && zypper up -r suma3_tools", "install update from tools", 1000)
+    run_cmd(server, "zypper -n up  -r  SUSE_Updates_SUSE-Manager-Server_3.0_x86_64 -l", "install update suse-mgr server", 3000)
+
+    # setup packages on client machine
     client_setup()
+    # install updates on server GMC
+
     # run migration.sh script
     journal.beginGroup("init suma-machines")
+    SERVER_INIT= "/var/lib/slenkins/tests-suse-manager/tests-server/bin/suma_init.sh"
     runOrRaise(server, SERVER_INIT,  "INIT_SERVER", 8000)
     # modify clobber 
     post_install_server()
@@ -98,6 +112,7 @@ try:
     journal.beginGroup("running cucumber-suite on jail")
     run_all_feature() 
     # check that all test are sucessufull (control node side)
+    # otherwise fail in Jenkins .
     check_cucumber()
 
 except susetest.SlenkinsError as e:

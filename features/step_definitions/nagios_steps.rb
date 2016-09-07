@@ -26,7 +26,7 @@ Then(/^I should see WARNING: 1 patch pending$/) do
 end
 
 Then(/^I should see Completed: OpenSCAP xccdf scanning scheduled by testing$/) do
-  command = "grep \"Completed: OpenSCAP xccdf scanning scheduled by testing\" /tmp/nagios.out 2>&1"
+  command = "grep \"Completed: OpenSCAP xccdf scanning scheduled by testing\" /tmp/nagios.out"
   output, local, remote, code = $server.test_and_store_results_together(command, "root", 600)
   if code != 0
     run_cmd($server, "cat /tmp/nagios.out", 600)

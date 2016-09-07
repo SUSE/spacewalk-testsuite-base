@@ -75,7 +75,7 @@ Then(/^I restart the spacewalk service$/) do
 end
 
 Then(/^I execute spacewalk-debug on the server$/) do
-  sshcmd("spacewalk-debug")
+   out, _local, _remote, _code = $server.test_and_store_results_together("spacewalk-debug", "root", 600)
 end
 
 When(/^I copy "([^"]*)"$/) do |arg1|

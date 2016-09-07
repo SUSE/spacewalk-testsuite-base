@@ -4,4 +4,4 @@
 Feature: Check spacewalk logs for errors
 
   Scenario: Check spacewalk upd2date logs
-    Then I check the up2date logs on client
+    Then I control that up2date logs on client under test contains no Traceback error
