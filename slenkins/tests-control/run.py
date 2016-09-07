@@ -41,7 +41,8 @@ def client_setup():
 	update_repo = "zypper ar http://download.suse.de/ibs/SUSE/Updates/SUSE-Manager-Server/3.0/x86_64/update/SUSE:Updates:SUSE-Manager-Server:3.0:x86_64.repo ;"
 	run_cmd(client, update_repo + "zypper -n --gpg-auto-import-keys ref ;", "install openscap repo", 400)
 	openscap = [ "openscap-content", "openscap-extra-probes", "openscap-utils"]
-        [  run_cmd(node, "zypper -n in" + scap , "install" + scap) for scap in openscap ]
+        [  run_cmd(client, "zypper -n in " + scap , "install" + scap) for scap in openscap ]
+
 def setup_server():		
 	change_hostname = "echo \"{}     suma-server.example.com\" >> /etc/hosts; echo \"suma-server.example.com\" > /etc/hostname;  hostname -f".format(server.ipaddr)
 	run_cmd(server, "hostname suma-server.example.com",  "change hostname ", 8000)
@@ -93,14 +94,8 @@ try:
 
     SET_SUMAPWD =  "chpasswd <<< \"root:linux\""
     [  run_cmd(node, SET_SUMAPWD, "change root pwd to linux") for node in (server, client, minion) ]
-    # install some spacewalk packages on client
-    run_cmd(server, " zypper ar http://download.suse.de/ibs/SUSE/Updates/SUSE-Manager-Server/3.0/x86_64/update/SUSE:Updates:SUSE-Manager-Server:3.0:x86_64.repo", "gmc-update repo")
-    run_cmd(server, "zypper -n --gpg-auto-import-keys ref && zypper up -r suma3_tools", "install update from tools", 1000)
-    run_cmd(server, "zypper -n up  -r  SUSE_Updates_SUSE-Manager-Server_3.0_x86_64 -l", "install update suse-mgr server", 3000)
-
     # setup packages on client machine
     client_setup()
-    # install updates on server GMC
 
     # run migration.sh script
     journal.beginGroup("init suma-machines")
@@ -108,6 +103,7 @@ try:
     runOrRaise(server, SERVER_INIT,  "INIT_SERVER", 8000)
     # modify clobber 
     post_install_server()
+
     # run cucumber suite 
     journal.beginGroup("running cucumber-suite on jail")
     run_all_feature() 

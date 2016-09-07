@@ -13,6 +13,13 @@ zypper -n in --auto-agree-with-licenses -t pattern suma_server
 zypper -n in timezone
 # tools devel
 zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-12-Manager-Tools-POOL-x86_64-Media1/ suma3_tools
+
+## updates are here :
+#zypper ar http://download.suse.de/ibs/SUSE/Updates/SUSE-Manager-Server/3.0/x86_64/update/SUSE:Updates:SUSE-Manager-Server:3.0:x86_64.repo
+#zypper -n up -r  SUSE_Updates_SUSE-Manager-Server_3.0_x86_64 -l
+#zypper -n up -r suma3_tools -l 
+
+
 echo "+++++++++++++++++++++++"
 echo "installing packages ok"
 echo "+++++++++++++++++++++++"
