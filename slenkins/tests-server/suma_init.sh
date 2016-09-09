@@ -3,10 +3,10 @@ sut_dir="/var/lib/slenkins/tests-suse-manager/tests-server"
 
 mv $sut_dir/*.rpm /root/
 # gmc 
-zypper ar http://dist.suse.de/install/SLP/SUSE-Manager-Server-3-GM/x86_64/DVD1/ suma3-gmc
+# zypper ar http://dist.suse.de/install/SLP/SUSE-Manager-Server-3-GM/x86_64/DVD1/ suma3-gmc
 
 # devel
-#zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/3.0/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3_devel
+zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/3.0/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3_devel
 
 zypper -n --gpg-auto-import-keys ref
 zypper -n in --auto-agree-with-licenses -t pattern suma_server
