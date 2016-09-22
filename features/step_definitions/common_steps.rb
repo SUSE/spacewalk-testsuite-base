@@ -16,10 +16,6 @@ Then(/^I download the SSL certificate$/) do
   # download certicate on the client from the server via ssh protocol
   cert_path = "/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT"
   wget = "wget --no-check-certificate -o"
-  _out, loc, rem, c = $client.test_and_print_results("#{wget} #{cert_path} http://#{$server_ip}/pub/RHN-ORG-TRUSTED-SSL-CERT", "root", 500)
-
-  if c != 0 && loc != 0 && rem != 0
-    raise "fail to download the ssl certificate"
-  end
-  _out, _local, _remote, _code = $client.test_and_print_results("ls #{cert_path}", "root", 500)
+  $client.run("#{wget} #{cert_path} http://#{$server_ip}/pub/RHN-ORG-TRUSTED-SSL-CERT", true, 500, 'root')
+  $client.run("ls #{cert_path}")
 end

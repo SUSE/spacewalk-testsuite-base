@@ -2,6 +2,6 @@
 # Licensed under the terms of the MIT license.
 
 Then(/^I control that up2date logs on client under test contains no Traceback error$/) do
-  check_up2date = "grep \"Traceback\" /var/log/up2date"
-  $client.run(check_up2date)
+  cmd = "grep \"Traceback\" /var/log/up2date"
+  $client.run(cmd)
 end
