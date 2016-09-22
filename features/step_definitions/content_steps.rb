@@ -245,10 +245,7 @@ Then(/^I should see a "([^"]*)" editor in "([^"]*)" form$/) do |arg1, arg2|
 end
 
 Then(/^"([^"]*)" is installed$/) do |package|
-  out, _external, _local, code = run_cmd($client, "rpm -q #{package} 2>&1", 600)
-  if code != 0
-     raise "exec rpm failed (Code #{out}:"
-  end
+  $client.run("rpm -q #{package} 2>&1", true, 600, 'root')
 end
 
 Then(/^I should see a Sign Out link$/) do

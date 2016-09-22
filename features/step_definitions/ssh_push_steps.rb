@@ -3,8 +3,8 @@
 
 When(/^I register this client for SSH push via tunnel$/) do
   # Create backups of /etc/hosts and up2date config
-  run_cmd($server, "cp /etc/hosts /etc/hosts.BACKUP", 600)
-  run_cmd($server, "/etc/sysconfig/rhn/up2date /etc/sysconfig/rhn/up2date.BACKUP", 600)
+  $server.run("cp /etc/hosts /etc/hosts.BACKUP")
+  $server.run("/etc/sysconfig/rhn/up2date /etc/sysconfig/rhn/up2date.BACKUP")
 
   # Generate expect file
   bootstrap = '/srv/www/htdocs/pub/bootstrap/bootstrap-ssh-push-tunnel.sh'
@@ -13,12 +13,8 @@ When(/^I register this client for SSH push via tunnel$/) do
   filename = expect_file.filename
   # Perform the registration
   command = "expect #{filename}"
-  _out, _local, _remote, code = $server.test_and_store_results_together(command, "root", 600)
-  if code != 0
-    raise "Execute command failed: #{out}"
-  end
-
+  $server.run(command, true, 600, 'root')
   # Restore files from backups
-  run_cmd($server, "mv /etc/hosts.BACKUP /etc/hosts", 500)
-  run_cmd($server, "mv /etc/sysconfig/rhn/up2date.BACKUP /etc/sysconfig/rhn/up2date", 500)
+  $server.run("mv /etc/hosts.BACKUP /etc/hosts")
+  $server.run("mv /etc/sysconfig/rhn/up2date.BACKUP /etc/sysconfig/rhn/up2date")
 end

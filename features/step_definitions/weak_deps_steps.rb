@@ -38,7 +38,7 @@ Then(/^"([^"]*)" should exists in the metadata$/) do |file|
 end
 
 Then(/^I should have '([^']*)' in the patch metadata$/) do |text|
-  #FIXME: change arch also here
+  # FIXME: change arch also here
   arch = `uname -m`
   arch.chomp!
   if arch != "x86_64"
