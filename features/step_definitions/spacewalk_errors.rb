@@ -3,8 +3,5 @@
 
 Then(/^I control that up2date logs on client under test contains no Traceback error$/) do
   check_up2date = "grep \"Traceback\" /var/log/up2date"
-  _out, _loc, _rem, code = $client.test_and_print_results(check_up2date, "root", 500)
-  if code != 0
-    raise "FAIL: ERRORS founds on  up2date log: check /var/log/up2date on client!"
-  end
+  $client.run(check_up2date)
 end
