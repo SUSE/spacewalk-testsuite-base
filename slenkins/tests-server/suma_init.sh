@@ -6,14 +6,16 @@ mv $sut_dir/*.rpm /root/
 # zypper ar http://dist.suse.de/install/SLP/SUSE-Manager-Server-3-GM/x86_64/DVD1/ suma3-gmc
 
 # devel HEAD
-zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3_devel_head
-#zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/3.0/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3_devel
+#zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3_devel_head
+
+zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/3.0/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3_devel
 
 zypper -n --gpg-auto-import-keys ref
 zypper -n in --auto-agree-with-licenses -t pattern suma_server
 zypper -n in timezone
 # tools devel
-zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-12-Manager-Tools-POOL-x86_64-Media1/ suma3_tools
+# zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-12-Manager-Tools-POOL-x86_64-Media1/ suma3_tools
+# zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/Head/images/repo/SLE-12-Manager-Tools-POOL-x86_64-Media1/ suma3_tools
 
 ## updates are here :
 #zypper ar http://download.suse.de/ibs/SUSE/Updates/SUSE-Manager-Server/3.0/x86_64/update/SUSE:Updates:SUSE-Manager-Server:3.0:x86_64.repo

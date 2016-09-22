@@ -50,18 +50,22 @@ def setup_server():
 	run_cmd(server, change_hostname, "change hostsfile",  200)
 	run_cmd(server, "mv  /var/lib/slenkins/tests-suse-manager/tests-server/install/ /", "move install", 900)
 
+def setup_minion():
+	# adding the repo devel for install salt-minion package.
+	saltRepo = "zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/3.0/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3_devel ; "
+	saltInst = "zypper -n --gpg-auto-import-keys ref;  zypper -n in salt-minion;"
+	run_cmd(minion, saltRepo + saltInst, "installing SALT on Minion SLES", 400)
+
 ######################
 # MAIN 
 #####################
 setup()
 
-run_cucumber_on_jail = "cp -R /var/lib/slenkins/tests-suse-manager/tests-control/cucumber/ $WORKSPACE; export CLIENT={}; export TESTHOST={}; export BROWSER=phantomjs; cd $WORKSPACE/cucumber; rake".format(client.ipaddr_ext, server.ipaddr_ext)
-
 def run_all_feature():
 	''' this function is on the control-node, and run all cucumber features defined on run_sets/testsuite.yml'''
 	journal.beginTest("running cucumber whole suite")
 	subprocess.call("cp -R /var/lib/slenkins/tests-suse-manager/tests-control/cucumber/ $WORKSPACE; cd $WORKSPACE/cucumber;", shell=True)
-        subprocess.call("export CLIENT={0}; export TESTHOST={1}; export BROWSER=phantomjs; cd $WORKSPACE/cucumber ; rake ".format(client.ipaddr_ext, server.ipaddr_ext), shell=True)
+        subprocess.call("export MINION={2}; export CLIENT={0}; export TESTHOST={1}; export BROWSER=phantomjs; cd $WORKSPACE/cucumber ; rake ".format(client.ipaddr_ext, server.ipaddr_ext, minion.ipaddr_ext), shell=True)
 	journal.success("finished to run cucumber")
 	
 def post_install_server():
@@ -103,6 +107,9 @@ try:
     runOrRaise(server, SERVER_INIT,  "INIT_SERVER", 8000)
     # modify clobber 
     post_install_server()
+
+    # setup the minion (SLES minion)
+    setup_minion()
 
     # run cucumber suite 
     journal.beginGroup("running cucumber-suite on jail")

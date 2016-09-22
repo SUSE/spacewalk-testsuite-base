@@ -19,4 +19,6 @@ node          minion
 repository    ${CHANNEL_GALAXY_MINION}
 repository    ${CHANNEL_SLENKINS_MINION}
 repository    ${CHANNEL_UPDATES_MINION}
+# salt-minion package 
+repository 
 install       tests-suse-manager-tests-minion
