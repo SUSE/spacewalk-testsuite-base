@@ -68,54 +68,27 @@ When(/^I restart salt-minion$/) do
 end
 
 Then(/^the Salt Minion should be running$/) do
-  out = ""
-  begin
-    Timeout.timeout(DEFAULT_TIMEOUT) do
-      loop do
-        out = `systemctl status salt-minion`
-        break if $?.success?
-        sleep(1)
-      end
-    end
-  rescue Timeout::Error
-    fail "salt-minion status: #{out}"
-  end
+  $minion.run("systemctl status salt-minion", false)
 end
 
 When(/^I list unaccepted keys at Salt Master$/) do
-  @action = lambda do
-    return sshcmd("salt-key --list unaccepted")
-  end
+  @out, _code = $server.run("salt-key --list unaccepted", false)
+  @out.strip
 end
 
 When(/^I list accepted keys at Salt Master$/) do
-  @action = lambda do
-    return sshcmd("salt-key --list accepted")
-  end
+  @out, _code = $server.run("salt-key --list accepted", false)
+  @out.strip
 end
 
 When(/^I list rejected keys at Salt Master$/) do
-  @action = lambda do
-    return sshcmd("salt-key --list rejected")
-  end
+  @out, _code = $server.run("salt-key --list rejected", false)
+  @out.strip
 end
 
 Then(/^the list of the keys should contain this client's hostname$/) do
-  time_waited = 0
-  begin
-    Timeout.timeout(120) do
-      loop do
-        @output = @action.call
-        break if @output[:stdout].include?($myhostname)
-        sleep(1)
-        time_waited += 1
-      end
-    end
-  rescue Timeout::Error
-    puts "timeout waiting for the key to appear"
-  end
-  assert_match(/#{$minion_hostname}/, @output[:stdout], "#{$minion_hostname} is not listed in the key list")
-  puts "Total time waited: #{time_waited}"
+  out, _code = $server.run("salt-key -L", false)
+  assert_match($minion_hostname, out, "#{$minion_hostname} is not listed in the key list")
 end
 
 Given(/^this minion key is unaccepted$/) do
@@ -174,7 +147,8 @@ When(/^we wait till Salt master sees this minion as rejected$/) do
 end
 
 When(/^I delete this minion key in the Salt master$/) do
-  $server.run("salt-key -y -d #{$minion_hostname}", false)
+  out, _code = $server.run("salt-key -y -d #{$minion_hostname}", false)
+  print out
 end
 
 When(/^I accept this minion key in the Salt master$/) do
