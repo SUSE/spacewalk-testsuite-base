@@ -68,7 +68,16 @@ When(/^I restart salt-minion$/) do
 end
 
 Then(/^the Salt Minion should be running$/) do
-  $minion.run("systemctl status salt-minion", false)
+  i = 0
+  MAX_ITER = 40
+  loop do
+    _out, code = $minion.run("systemctl status salt-minion", false)
+    break if code == 0
+    sleep(5)
+    puts "sleeping 5 secs, minion not active."
+    i += 1
+    raise "TIMEOUT; something wrong with minion status" if i == MAX_ITER
+  end
 end
 
 When(/^I list unaccepted keys at Salt Master$/) do
@@ -87,20 +96,15 @@ When(/^I list rejected keys at Salt Master$/) do
 end
 
 Then(/^the list of the keys should contain this client's hostname$/) do
-  out, _code = $server.run("salt-key -L", false)
-  assert_match($minion_hostname, out, "#{$minion_hostname} is not listed in the key list")
+  # FIXME: Find better way then sleep
+  sleep(30)
+  out, _code = $server.run("salt-key --list all", false)
+  assert_match($minion_hostname, out, "minion #{$minion_hostname} is not listed on salt-master #{out}")
 end
 
 Given(/^this minion key is unaccepted$/) do
   step "I list unaccepted keys at Salt Master"
-  @output = @action.call
-  unless @output[:stdout].include? $myhostname
-    steps %(
-      Then I delete this minion key in the Salt master
-      And I restart salt-minion
-      And we wait till Salt master sees this minion as unaccepted
-        )
-  end
+  assert_match($minion_hostname, @out, "minion #{$minion_hostname} is not listed on salt-master #{out}")
 end
 
 When(/^we wait till Salt master sees this minion as unaccepted$/) do
