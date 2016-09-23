@@ -73,7 +73,7 @@ Then(/^the Salt Minion should be running$/) do
   loop do
     _out, code = $minion.run("systemctl status salt-minion", false)
     break if code == 0
-    sleep(5)
+    sleep 5
     puts "sleeping 5 secs, minion not active."
     i += 1
     raise "TIMEOUT; something wrong with minion status" if i == MAX_ITER
@@ -81,30 +81,30 @@ Then(/^the Salt Minion should be running$/) do
 end
 
 When(/^I list unaccepted keys at Salt Master$/) do
-  @out, _code = $server.run("salt-key --list unaccepted", false)
-  @out.strip
+  $out, _code = $server.run("salt-key --list unaccepted", false)
+  $out.strip
 end
 
 When(/^I list accepted keys at Salt Master$/) do
-  @out, _code = $server.run("salt-key --list accepted", false)
-  @out.strip
+  $out, _code = $server.run("salt-key --list accepted", false)
+  $out.strip
 end
 
 When(/^I list rejected keys at Salt Master$/) do
-  @out, _code = $server.run("salt-key --list rejected", false)
-  @out.strip
+  $out, _code = $server.run("salt-key --list rejected", false)
+  $out.strip
 end
 
 Then(/^the list of the keys should contain this client's hostname$/) do
-  # FIXME: Find better way then sleep
-  sleep(30)
+  sleep 30
+  # FIXME: find better way then to wait 30 seconds
   out, _code = $server.run("salt-key --list all", false)
-  assert_match($minion_hostname, out, "minion #{$minion_hostname} is not listed on salt-master #{out}")
+  assert_match($minion_hostname, out, "minion #{$minion_hostname} is not listed on salt-master #{$out}")
 end
 
 Given(/^this minion key is unaccepted$/) do
   step "I list unaccepted keys at Salt Master"
-  assert_match($minion_hostname, @out, "minion #{$minion_hostname} is not listed on salt-master #{out}")
+  assert_match($minion_hostname, $out, "minion #{$minion_hostname} is not listed on salt-master #{$out}")
 end
 
 When(/^we wait till Salt master sees this minion as unaccepted$/) do
