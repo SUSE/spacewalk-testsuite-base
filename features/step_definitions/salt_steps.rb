@@ -12,8 +12,10 @@ Given(/^the Salt Minion is configured$/) do
     file_delete($minion, key)
     puts "Key #{key} has been removed on minion"
   end
-  cmd = " echo  \'#{$server_ip}\' >> /etc/salt/minion.d/master.conf"
-  $minion.run(cmd, false)
+  _out, code = $minion.run("grep \'#{$server_ip}\' >> /etc/salt/minion.d/master.conf")
+  # if the adress is not there, then write it
+  cmd = " echo  \'master : #{$server_ip}\' >> /etc/salt/minion.d/master.conf"
+  $minion.run(cmd, false) if code
   step %(I start salt-master)
   step %(I start salt-minion)
 end
@@ -205,7 +207,7 @@ Then(/^salt\-api should be listening on local port (\d+)$/) do |port|
 end
 
 Then(/^salt\-master should be listening on public port (\d+)$/) do |port|
-  output = $server.run("ss -nta | grep #{port}")
+  output, _code = $server.run("ss -nta | grep #{port}")
   assert_match(/\*:#{port}/, output)
 end
 
