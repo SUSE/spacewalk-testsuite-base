@@ -58,7 +58,7 @@ When(/^I stop salt-minion$/) do
 end
 
 When(/^I start salt-minion$/) do
-  $server.run("systemctl start salt-minion", false)
+  $minion.run("systemctl start salt-minion", false)
 end
 
 When(/^I restart salt-minion$/) do
@@ -192,7 +192,7 @@ When(/^I accept all Salt unaccepted keys$/) do
 end
 
 When(/^I get OS information of the Minion from the Master$/) do
-  @output = sshcmd("salt #{$minion_hostname} grains.get osfullname")
+  @output, _code = $server.run("salt #{$minion_hostname} grains.get osfullname")
 end
 
 Then(/^it should contain a "(.*?)" text$/) do |content|
@@ -200,13 +200,13 @@ Then(/^it should contain a "(.*?)" text$/) do |content|
 end
 
 Then(/^salt\-api should be listening on local port (\d+)$/) do |port|
-  output = sshcmd("ss -nta | grep #{port}")
-  assert_match(/127.0.0.1:#{port}/, output[:stdout])
+  output, _code = $server.run("ss -nta | grep #{port}")
+  assert_match(/127.0.0.1:#{port}/, output)
 end
 
 Then(/^salt\-master should be listening on public port (\d+)$/) do |port|
-  output = sshcmd("ss -nta | grep #{port}")
-  assert_match(/\*:#{port}/, output[:stdout])
+  output = $server.run("ss -nta | grep #{port}")
+  assert_match(/\*:#{port}/, output)
 end
 
 And(/^this minion is not registered in Spacewalk$/) do
