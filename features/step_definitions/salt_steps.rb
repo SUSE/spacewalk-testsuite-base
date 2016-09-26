@@ -12,10 +12,10 @@ Given(/^the Salt Minion is configured$/) do
     file_delete($minion, key)
     puts "Key #{key} has been removed on minion"
   end
-  _out, code = $minion.run("grep \'#{$server_ip}\' >> /etc/salt/minion.d/master.conf")
+  _out, code = $minion.run("grep \'#{$server_ip}\' >> /etc/salt/minion.d/master.conf", false)
   # if the adress is not there, then write it
   cmd = " echo  \'master : #{$server_ip}\' >> /etc/salt/minion.d/master.conf"
-  $minion.run(cmd, false) if code
+  $minion.run(cmd, false) if code != 0
   step %(I start salt-master)
   step %(I start salt-minion)
 end
@@ -60,7 +60,7 @@ When(/^I stop salt-minion$/) do
 end
 
 When(/^I start salt-minion$/) do
-  $minion.run("systemctl start salt-minion", false)
+  $minion.run("systemctl restart salt-minion", false)
 end
 
 When(/^I restart salt-minion$/) do
@@ -104,7 +104,13 @@ end
 
 Given(/^this minion key is unaccepted$/) do
   step "I list unaccepted keys at Salt Master"
-  assert_match($minion_hostname, $out, "minion #{$minion_hostname} is not listed on salt-master #{$out}")
+  unless $out.include? $minion_hostname
+    steps %(
+      Then I delete this minion key in the Salt master
+      And I restart salt-minion
+      And we wait till Salt master sees this minion as unaccepted
+        )
+     end
 end
 
 When(/^we wait till Salt master sees this minion as unaccepted$/) do
@@ -172,11 +178,11 @@ When(/^I accept all Salt unaccepted keys$/) do
 end
 
 When(/^I get OS information of the Minion from the Master$/) do
-  @output, _code = $server.run("salt #{$minion_hostname} grains.get osfullname")
+  $output, _code = $server.run("salt #{$minion_hostname} grains.get osfullname")
 end
 
 Then(/^it should contain a "(.*?)" text$/) do |content|
-  assert_match(/#{content}/, @output[:stdout])
+  assert_match(/#{content}/, $output)
 end
 
 Then(/^salt\-api should be listening on local port (\d+)$/) do |port|
