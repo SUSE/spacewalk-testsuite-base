@@ -12,10 +12,8 @@ Given(/^the Salt Minion is configured$/) do
     file_delete($minion, key)
     puts "Key #{key} has been removed on minion"
   end
-  _out, code = $minion.run("grep \'#{$server_ip}\' >> /etc/salt/minion.d/master.conf", false)
-  # if the adress is not there, then write it
-  cmd = " echo  \'master : #{$server_ip}\' >> /etc/salt/minion.d/master.conf"
-  $minion.run(cmd, false) if code != 0
+  cmd = " echo  \'master : #{$server_ip}\' > /etc/salt/minion.d/master.conf"
+  $minion.run(cmd, false)
   step %(I start salt-master)
   step %(I start salt-minion)
 end

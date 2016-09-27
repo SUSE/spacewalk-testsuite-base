@@ -245,7 +245,13 @@ Then(/^I should see a "([^"]*)" editor in "([^"]*)" form$/) do |arg1, arg2|
 end
 
 Then(/^"([^"]*)" is installed$/) do |package|
-  $client.run("rpm -q #{package} 2>&1", true, 600, 'root')
+  # if client(non-salt) has not the packages,
+  # then we are using a minion (sles for moment).
+  _out, code = $client.run("rpm -q #{package}", false, 600, 'root')
+  if code != 0
+    puts "testing on minion"
+    _out, _code = $minion.run("rpm -q #{package}", true, 600, 'root')
+  end
 end
 
 Then(/^I should see a Sign Out link$/) do

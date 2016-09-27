@@ -24,8 +24,8 @@ Then(/^"([^"]*)" is not installed$/) do |package|
   begin
     Timeout.timeout(60) do
       loop do
-        output = `rpm -q #{package} 2>&1`
-        unless $?.success?
+        output, code = $minion.run("rpm -q #{package}", false)
+        if code != 0
           uninstalled = true
           sleep 15
           break
@@ -43,8 +43,8 @@ Then(/^I wait for "([^"]*)" to be installed$/) do |package|
   begin
     Timeout.timeout(60) do
       loop do
-        output = `rpm -q #{package} 2>&1`
-        if $?.success?
+        output, code = $minion.run("rpm -q #{package}", false)
+        if code == 0
           installed = true
           sleep 15
           break

@@ -33,7 +33,7 @@ def client_setup():
                         zypper -n in spacewalk-oscap; 
 			zypper -n in rhncfg-actions'''
         run_cmd(client, init_client, "init client", 600)
-
+        # dummy packages for tests
 	run_cmd(client, " zypper -n in andromeda-dummy milkyway-dummy virgo-dummy", "install dummy package needed by tests", 900)
         run_cmd(client, "echo \"{}     suma-server.example.com\" >> /etc/hosts;" .format(server.ipaddr), "setup host", 300)
 	# openscap packages needed for tests
@@ -55,7 +55,15 @@ def setup_minion():
 	saltRepo = "zypper ar http://download.suse.de/ibs/Devel:/Galaxy:/Manager:/3.0/images/repo/SUSE-Manager-Server-3.0-POOL-x86_64-Media1/ suma3_devel ; "
 	saltInst = "zypper -n --gpg-auto-import-keys ref;  zypper -n in salt-minion;"
 	run_cmd(minion, saltRepo + saltInst, "installing SALT on Minion SLES", 400)
-
+	# change hostname to sle-minion
+	change_hostname = "echo \"{}     sle-minion.example.com\" >> /etc/hosts; echo \"sle-minion.example.com\" > /etc/hostname;  hostname -f".format(minion.ipaddr)
+        run_cmd(minion, "hostname sle-minion.example.com",  "change hostname ", 8000)
+        run_cmd(minion, "sed -i '$ d' /etc/hosts;", "change hosts file", 100)
+        run_cmd(minion, change_hostname, "change hostsfile",  200)
+        # install dummy packages for salt test needed.
+	run_cmd(minion, " zypper -n in andromeda-dummy milkyway-dummy virgo-dummy", "install dummy package needed by tests", 900)
+	# this is for that server and minion can know they togheter.
+        run_cmd(minion, "echo \"{}     suma-server.example.com\" >> /etc/hosts;" .format(server.ipaddr), "setup host", 300)
 ######################
 # MAIN 
 #####################
