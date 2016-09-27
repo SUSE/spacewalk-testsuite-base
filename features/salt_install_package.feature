@@ -4,7 +4,7 @@
 Feature: Install a patch the client via salt through the UI
 
    Scenario: wait for taskomatic finished required jobs
-    Given Patches are visible for the registered minion
+    Given Patches are visible for the registered client
 
    Scenario: Install an erratum to the minion
     Given I am on the Systems overview page of this minion
