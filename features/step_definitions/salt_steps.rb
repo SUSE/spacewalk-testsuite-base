@@ -82,7 +82,7 @@ Then(/^the Salt Minion should be running$/) do
   MAX_ITER = 40
   loop do
     _out, code = $minion.run("systemctl status salt-minion", false)
-    break if code == 0
+    break if code.zero?
     sleep 5
     puts "sleeping 5 secs, minion not active."
     i += 1
