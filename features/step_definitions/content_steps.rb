@@ -244,13 +244,16 @@ Then(/^I should see a "([^"]*)" editor in "([^"]*)" form$/) do |arg1, arg2|
   end
 end
 
-Then(/^"([^"]*)" is installed$/) do |package|
-  # if client(non-salt) has not the packages,
-  # then we are using a minion (sles for moment).
-  _out, code = $client.run("rpm -q #{package}", false, 600, 'root')
-  if code.nonzero?
-    puts "testing on minion"
-    _out, _code = $minion.run("rpm -q #{package}", true, 600, 'root')
+Then(/^"([^"]*)" is installed on "([^"]*)"$/) do |package, target|
+  # use target variable
+  case target
+  when "client"
+    $client.run("rpm -q #{package}", true, 600, 'root')
+  when "minion"
+    # this is a sles minion
+    $minion.run("rpm -q #{package}", true, 600, 'root')
+  else
+    raise "invalid target given"
   end
 end
 

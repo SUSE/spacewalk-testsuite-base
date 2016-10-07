@@ -20,12 +20,12 @@ Feature: Check the Salt package state UI
     And I should see a "Package States" text
     And I list packages with "dummy"
     Then I should see a "milkyway-dummy" text
-    And "milkyway-dummy" is installed
+    And "milkyway-dummy" is installed on "minion"
     And I change the state of "milkyway-dummy" to "Removed" and ""
     Then I should see a "1 Changes" text
     And I click save
     And I click apply
-    And "milkyway-dummy" is not installed
+    And "milkyway-dummy" is not installed on "minion" 
 
    Scenario: Test package installation through the UI
     Given I am on the Systems overview page of this minion
@@ -46,7 +46,7 @@ Feature: Check the Salt package state UI
     And I should see a "Package States" text
     And I list packages with "dummy"
     Then I should see a "virgo-dummy" text
-    And "virgo-dummy-1.0" is installed
+    And "virgo-dummy-1.0" is installed on "minion"
     And I change the state of "virgo-dummy" to "Installed" and "Any"
     Then I should see a "1 Changes" text
     And I click save
@@ -59,7 +59,7 @@ Feature: Check the Salt package state UI
     And I should see a "Package States" text
     And I list packages with "dummy"
     Then I should see a "andromeda-dummy" text
-    And "andromeda-dummy-1.0-4.1" is installed
+    And "andromeda-dummy-1.0-4.1" is installed on "minion"
     And I change the state of "andromeda-dummy" to "Installed" and "Latest"
     Then I should see a "1 Changes" text
     And I click save
