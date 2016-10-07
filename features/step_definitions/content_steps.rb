@@ -248,7 +248,7 @@ Then(/^"([^"]*)" is installed$/) do |package|
   # if client(non-salt) has not the packages,
   # then we are using a minion (sles for moment).
   _out, code = $client.run("rpm -q #{package}", false, 600, 'root')
-  if code.zero?
+  if code.nonzero?
     puts "testing on minion"
     _out, _code = $minion.run("rpm -q #{package}", true, 600, 'root')
   end
