@@ -25,7 +25,7 @@ Feature: Check the Salt package state UI
     Then I should see a "1 Changes" text
     And I click save
     And I click apply
-    And "milkyway-dummy" is not installed on "minion" 
+    And "milkyway-dummy" is not installed 
 
    Scenario: Test package installation through the UI
     Given I am on the Systems overview page of this minion
