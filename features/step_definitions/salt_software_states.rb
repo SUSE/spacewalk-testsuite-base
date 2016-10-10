@@ -44,7 +44,7 @@ Then(/^I wait for "([^"]*)" to be installed$/) do |package|
     Timeout.timeout(120) do
       loop do
         output, code = $minion.run("rpm -q #{package}", false)
-        if code.nonzero?
+        if code.zero?
           installed = true
           sleep 15
           break
