@@ -8,12 +8,12 @@ def gap(th)
   gap.times { picker_years.find(th).click }
 end
 
-def days_find()
+def days_find(day)
  day_xpath = <<-eos
   //*[contains(concat(" ", normalize-space(@class), " "), " day ")
    and not (contains(concat(" ", normalize-space(@class), " "), " new "))
    and not(contains(concat(" ", normalize-space(@class), " "), " old "))
-   and normalize-space(text())="#{value.day}"]
+   and normalize-space(text())="#{day}"]
   eos
   picker_days.find(:xpath, day_xpath).click
 end
@@ -39,7 +39,7 @@ Given(/^I pick "([^"]*)" as date$/) do |arg1|
   end
   picker_years.find('.year', text: value.year).click
   picker_months.find('.month', text: value.strftime('%b')).click
-  days_find()
+  days_find(value.day)
 end
 
 Then(/^the date field is set to "([^"]*)"$/) do |arg1|
