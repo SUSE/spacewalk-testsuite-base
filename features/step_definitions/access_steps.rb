@@ -16,13 +16,33 @@ Given(/^I access the host the first time$/) do
   fail unless page.has_content?("Create SUSE Manager Administrator")
 end
 
+def collect_href()
+  vcollect_all_hrefs.each do |fhref|
+    next if fhref[0, 1] == "#" # relative link
+    next if hrefs.include?(fhref)
+    hbase = fhref.split("?")[0]
+    next if visited[hbase]
+    visited[hbase] = true
+    if hbase.nil? || hbase.empty?
+        # Example: fhref = "?order=asc&sort=login"
+        fhref = base.concat(fhref)
+    elsif fhref[0, 1] != "/"
+        # Example: fhref = "delete_confirm.pxt?sgid=7"
+        hsplit = base.split("/")
+        hsplit.pop
+        hsplit << fhref
+        fhref = hsplit.join("/")
+    end
+    hrefs << fhref
+    relation[fhref.to_s] = href.to_s
+  end
+end
+
 Then(/^no link should be broken$/) do
 #  require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "collect"))
   Capybara.default_wait_time = 1
   visit Capybara.app_host
-
   relation = {}
-
   hrefs = collect_all_hrefs
   hrefs.each do |url|
       relation[url.to_s] = "/"
@@ -41,10 +61,8 @@ Then(/^no link should be broken$/) do
     # We have one page in our manual with has "Internal Server Error" in its text
     # we need to mark this page as success.
     if base != '/rhn/help/reference/en-US/ch-rhn-workgroup.jsp' &&
-       (htmlbody.include?('Page Not Found') ||
-        htmlbody.include?('File Not Found') ||
-        htmlbody.include?('Internal Server Error') ||
-        htmlbody.include?('Permission Error')
+       (htmlbody.include?('Page Not Found') || htmlbody.include?('File Not Found') ||
+        htmlbody.include?('Internal Server Error') || htmlbody.include?('Permission Error')
        )
       visited[base] = href
       $stderr.puts "-- ** failed"
@@ -53,34 +71,7 @@ Then(/^no link should be broken$/) do
           $stderr.puts "-- ** failed (/var/www)"
           failed_other_reason << href
       end
-      # if page.has_content?('Errata') || page.has_content?('Erratum')
-      #    $stderr.puts "-- ** failed (Errata)"
-      #    failed_other_reason << href
-      # end
-      collect_all_hrefs.each do |fhref|
-          next if fhref[0, 1] == "#" # relative link
-          next if hrefs.include?(fhref)
-          hbase = fhref.split("?")[0]
-          next if visited[hbase]
-          visited[hbase] = true
-          if hbase.nil? || hbase.empty?
-              # Example: fhref = "?order=asc&sort=login"
-              fhref = base.concat(fhref)
-#             $stderr.puts "\t empyt hbase; new href is #{fhref}"
-          elsif fhref[0, 1] != "/"
-              # Example: fhref = "delete_confirm.pxt?sgid=7"
-#             $stderr.puts "From #{fhref} (#{base})"
-              hsplit = base.split("/")
-              hsplit.pop
-              hsplit << fhref
-              fhref = hsplit.join("/")
-#             $stderr.puts "\t to #{fhref}"
-          end
-#         $stderr.puts "Adding #{fhref}"
-          hrefs << fhref
-          relation[fhref.to_s] = href.to_s
-          # $stderr.puts "add rel #{fhref.to_s} => #{relation[fhref.to_s]}"
-      end
+      collect_href()
     end
     break if hrefs.empty?
   end
