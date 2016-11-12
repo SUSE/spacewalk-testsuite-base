@@ -16,7 +16,7 @@ Given(/^I access the host the first time$/) do
   fail unless page.has_content?("Create SUSE Manager Administrator")
 end
 
-def collect_href()
+def collect_href
   vcollect_all_hrefs.each do |fhref|
     next if fhref[0, 1] == "#" # relative link
     next if hrefs.include?(fhref)
@@ -71,7 +71,7 @@ Then(/^no link should be broken$/) do
           $stderr.puts "-- ** failed (/var/www)"
           failed_other_reason << href
       end
-      collect_href()
+      collect_href
     end
     break if hrefs.empty?
   end
