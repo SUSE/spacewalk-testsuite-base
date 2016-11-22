@@ -12,32 +12,38 @@ After('@revertgoodpass') do |scenario|
   changepass(scenario, 'GoodPass')
 end
 
+def ckUsernameField(timeout)
+  fill_in "username", :with => "admin"
+rescue
+    sleep(timeout)
+    fill_in "username", :with => "admin"
+end
+
 def changepass(scenario, password)
-  # only change the password if the wrong one worked
-  return unless has_xpath?("//a[@href='/rhn/Logout.do']")
+  # only change the password if the wrong worked.
+  # (Guard clause)
+  return false unless has_xpath?("//a[@href='/rhn/Logout.do']")
 
   signout = find(:xpath, "//a[@href='/rhn/Logout.do']")
-  if signout
-    signout.click
-  end
-  fill_in "username", :with => "admin"
+  signout.click if signout
+  # sometimes race condition,
+  # Unable to find field "username" (Capybara::ElementNotFound)
+  ckUsernameField(10)
   fill_in "password", :with => password
   click_button "Sign In"
-
   find_link("Your Account").click
-  sleep(2)
-
+  sleep(5)
   begin
-      fill_in "desiredpassword", :with => "admin"
+    fill_in "desiredpassword", :with => "admin"
   rescue
-      sleep(2)
-      fill_in "desiredpassword", :with => "admin"
+    sleep(5)
+    fill_in "desiredpassword", :with => "admin"
   end
   begin
-      fill_in "desiredpasswordConfirm", :with => "admin"
+    fill_in "desiredpasswordConfirm", :with => "admin"
   rescue
-      sleep(2)
-      fill_in "desiredpasswordConfirm", :with => "admin"
+    sleep(5)
+    fill_in "desiredpasswordConfirm", :with => "admin"
   end
   click_button "Update"
 end
