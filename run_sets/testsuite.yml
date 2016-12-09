@@ -71,6 +71,7 @@
 
 #### Salt related features   ###
 - features/minion_bootstrap.feature
+- features/salt_ssh.feature
 - features/salt.feature
 - features/salt_minions_page.feature
 - features/salt_minion_details.feature
@@ -81,7 +82,6 @@
 # - features/salt_action_pickedup.feature NEED FIX, for moment Unstable
 - features/salt_install_package.feature
 - features/salt_states_catalog.feature
-- features/salt_ssh.feature
 - features/salt_regression.feature
 
 
