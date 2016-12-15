@@ -84,15 +84,11 @@
 - features/salt_ssh.feature
 - features/salt_regression.feature
 
-## Redhat client related feat. ###
+## Centos client related feat. ###
 ## ** salt ***
 
-## BLOCKED : because of bug. this a most elegant way to have a minion.
-# - features/minion_redhat_bootstrap.feature
-
-# HACK remove this
-- features/redhat_addMinion_cmdline.feature
-- features/redhat_salt_remote_cmds.feature
+- features/minion_centos_bootstrap.feature
+- features/centos_salt_remote_cmds.feature
 
 # end-tests
 - features/spacewalk-errors.feature

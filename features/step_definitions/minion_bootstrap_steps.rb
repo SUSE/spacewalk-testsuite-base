@@ -5,8 +5,8 @@ And(/^I enter the hostname of "([^"]*)" as hostname$/) do |minion|
   if minion == "sle-minion"
     step %(I enter "#{$minion_fullhostname}" as "hostname")
 
-  elsif minion == "rh-minion"
-    step %(I enter "#{$rh_minion_fullhostname}" as "hostname")
+  elsif minion == "ceos-minion"
+    step %(I enter "#{$ceos_minion_fullhostname}" as "hostname")
   else
     raise "no valid name of minion given! "
   end
@@ -21,9 +21,9 @@ Given(/^the salt-master can reach "([^"]*)"$/) do |minion|
         if minion == "sle-minion"
           out, _code = $server.run("salt #{$minion_fullhostname} test.ping")
           break if out.include?($minion_fullhostname)
-        elsif minion == "rh-minion"
-          out, _code = $server.run("salt #{$rh_minion_fullhostname} test.ping")
-          break if out.include?($rh_minion_fullhostname)
+        elsif minion == "ceos-minion"
+          out, _code = $server.run("salt #{$ceos_minion_fullhostname} test.ping")
+          break if out.include?($ceos_minion_fullhostname)
         end
         sleep(1)
       end
@@ -38,5 +38,6 @@ And(/^I remove pkg "([^"]*)" on minion$/) do |pkg|
 end
 
 Then(/^I run spacecmd listevents for sle-minion$/) do
+  $server.run("spacecmd -u admin -p admin clear_caches")
   $server.run("spacecmd -u admin -p admin system_listevents #{$minion_fullhostname}")
 end
