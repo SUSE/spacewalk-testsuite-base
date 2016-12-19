@@ -3,7 +3,12 @@
 require 'timeout'
 
 When(/^I click on preview$/) do
-  find('button#preview').click
+  begin
+    find('button#preview').click
+  rescue
+    sleep 10
+    find('button#preview').click
+  end
 end
 
 When(/^I click on run$/) do
