@@ -9,7 +9,7 @@ Manager 30
 
 ## Introduction
 
-Testsuite to automatically test Spacewalk/Suse-Manager
+Testsuite to automatically test Suse-Manager
 
 ### Usefull tutorial infos:
 
