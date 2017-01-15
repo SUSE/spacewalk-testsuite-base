@@ -11,7 +11,7 @@ Manager 30
 
 Testsuite to automatically test Suse-Manager
 
-### Usefull tutorial infos:
+### Some infos:
 
 [Testing-api tutorial](docs/api-call.md), [Branches that we use](docs/branches.md)
 
