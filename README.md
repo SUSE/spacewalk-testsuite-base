@@ -1,5 +1,5 @@
 
-# Spacewalk Testsuite
+# Spacewalk Testsuite 
 
 Master
 [![Build Status Master branch](https://travis-ci.org/SUSE/spacewalk-testsuite-base.svg?branch=master)](https://travis-ci.org/SUSE/spacewalk-testsuite-base)
@@ -9,9 +9,9 @@ Manager 30
 
 ## Introduction
 
-Testsuite to automatically test Spacewalk/Suse-Manager.
+Testsuite to automatically test Suse-Manager
 
-### Usefull tutorial infos:
+### Some infos:
 
 [Testing-api tutorial](docs/api-call.md), [Branches that we use](docs/branches.md)
 
