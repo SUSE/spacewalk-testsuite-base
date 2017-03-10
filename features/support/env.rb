@@ -89,19 +89,40 @@ Capybara.default_wait_time = 10
 case browser
 when :phantomjs
   require 'capybara/poltergeist'
-  Capybara.register_driver :poltergeist do |app|
-    Capybara::Poltergeist::Driver.new(app,
+   Capybara.register_driver :poltergeist do |app|
+    driver = Capybara::Poltergeist::Driver.new(app,
                                       :phantomjs_options => ['--debug=no',
                                                              '--ignore-ssl-errors=yes',
-                                                             '--ssl-protocol=TLSv1',
+                                                             '--ssl-protocol=any',
                                                              '--web-security=false'],
                                       :js_errors => false,
                                       :timeout => 250,
                                       :debug => false)
   end
+  
   Capybara.default_driver = :poltergeist
   Capybara.javascript_driver = :poltergeist
   Capybara.app_host = host
+when :chrome
+  require 'selenium-webdriver'
+   Capybara.register_driver :chrome do |app|
+     options = {
+       js_errors: false,
+       timeout: 360,
+       debug: true,
+       inspector: false,
+      }
+   Capybara::Selenium::Driver.new(app, :browser => :chrome,  
+     desired_capabilities: { 
+       'chromeOptions' => { 'args' => [ "--ignore-certificate-errors", "--headless" ] }
+      }
+    )
+   end
+   Capybara.default_driver = :chrome
+   Capybara.app_host = host
+   Capybara.javascript_driver = :chrome
+   Capybara.default_wait_time = 20
+   Capybara.current_driver = :chrome
 when :firefox
   require 'selenium-webdriver'
   Capybara.register_driver :selenium do |app|
@@ -130,5 +151,5 @@ end
 # restart always before each feature, we spare ram and
 # avoid ram issues!
 Before do
-  restart_phantomjs
+  restart_phantomjs if browser == "phantomjs"
 end
