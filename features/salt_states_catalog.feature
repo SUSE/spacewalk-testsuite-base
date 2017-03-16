@@ -5,13 +5,6 @@ Feature: Check the Salt package state UI
   In Order to test salt states catalog
   As the testing user
 
-  Scenario: Verify the states catalog UI
-    Given I am authorized as "testing" with password "testing"
-    Then I follow "Salt"
-    And I follow "State Catalog"
-    And I should see a "State Catalog" text
-    And I should see a "Items 0 - 0 of 0" text
-
   Scenario: I add a state through the UI
     Given I am authorized as "testing" with password "testing"
     Then I follow "Salt"
@@ -21,15 +14,45 @@ Feature: Check the Salt package state UI
     Then I should see a "Create State" text
     And I should see a "Name*:" text
     And I should see a "Content*:" text
-    And I enter "teststate" in the css "input[name='name']"
+    And I enter "dockerstate" in the css "input[name='name']"
     And I enter the salt state
       """
-      touch /root/foobar:
-        cmd.run:
-          - creates: /root/foobar
+      inst_ca-certificates:
+        pkg.installed:
+          - name: ca-certificates
+      
+      registry_cert:
+        file.managed:
+          - name: /etc/pki/trust/anchors/registry.mgr.suse.de.pem
+          - source: salt://dockerhost/registry.mgr.suse.de.pem
+          - makedirs: True
+      
+      suse_cert:
+        file.managed:
+          - name: /etc/pki/trust/anchors/SUSE_Trust_Root.crt.pem
+          - source: salt://dockerhost/SUSE_Trust_Root.crt.pem
+          - makedirs: True
+      
+      update_ca_truststore:
+        cmd.wait:
+          - name: /usr/sbin/update-ca-certificates
+          - watch:
+            - file: registry_cert
+            - file: suse_cert
+          - require:
+            - pkg: inst_ca-certificates
+      
+      docker_restart:
+        service.running:
+          - name: docker
+          - watch:
+            - cmd: update_ca_truststore
+            - file: suse_cert
+            - file: registry_cert
+      
       """
     And I click on the css "button#save-btn"
-    Then I should see a "State 'teststate' saved" text
+    Then I should see a "State 'dockerstate' saved" text
 
   Scenario: I add a apply a state via the UI
     Given I am on the Systems overview page of this "sle-minion"
@@ -37,9 +60,9 @@ Feature: Check the Salt package state UI
     Then I follow "Custom"
     And I should see a "Custom States" text
     And I click on the css "button#search-states"
-    Then I should see a "teststate" text
-    And I select the state "teststate"
+    Then I should see a "dockerstate" text
+    And I select the state "dockerstate"
     Then I should see a "1 Changes" text
     And I click on the css "button#save-btn"
     And I click on the css "button#apply-btn"
-    Then "/root/foobar" exists on the filesystem of "sle-minion"
+    Then "/etc/pki/trust/anchors/SUSE_Trust_Root.crt.pem" exists on the filesystem of "sle-minion"
