@@ -17,18 +17,18 @@ Dir.glob(File.join(Dir.pwd, 'run_sets', '*.yml')).each do |entry|
 end
 # initserver is the features set that run first
 desc "Initialize SUSE Manager Server"
-task :initserver do 
+task :initserver do
   puts "initserver"
   `touch initserver.html`
-#  Rake::Task['cucumber:initserver'].invoke
+  # Rake::Task['cucumber:initserver'].invoke
 end
 
 # salt features car run lik tradclient after initserver
 desc "Run salt feature tests"
-task :salt => [:initserver] do 
+task :salt => [:initserver] do
    puts "salt"
   `touch salt.html`
- # Rake::Task['cucumber:salt'].invoke
+  # Rake::Task['cucumber:salt'].invoke
 end
 
 # docker depends on salt and initserver 
@@ -36,14 +36,14 @@ desc "Run docker features tests"
 task :docker => [:initserver, :salt] do
   puts "docker"
   `touch docker.html`
-#  Rake::Task['cucumber:docker'].invoke
+  # Rake::Task['cucumber:docker'].invoke
 end
 
 desc "Run trad-client features tests"
 task :tradclient => [:initserver] do
   puts "tradclient"
   `touch tradclient.html`
-#  Rake::Task['cucumber:tradclient'].invoke
+  # Rake::Task['cucumber:tradclient'].invoke
 end
 
 # here is the MAIN function
