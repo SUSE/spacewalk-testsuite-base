@@ -1,0 +1,3 @@
+#### * Docker releated features tests.  ###
+
+- features/docker_build_image.feature
