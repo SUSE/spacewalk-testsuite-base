@@ -102,7 +102,7 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile" as "path"
   And I click on "create-btn"
 
-  Scenario: Build the images with and without activation key
+  Scenario: Build the simply images (no hostname inside) with and without activation key
   Given I am authorized as "admin" with password "admin"
   # At moment phantomjs has problemes with datapickler so we use xmlrpc-api
   And I schedule the build of image "suse_key" via xmlrpc-call  
@@ -121,12 +121,27 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I navigate to images build webpage
   Then I verify that all container images were built correctly in the gui
 
+  Scenario: Verify that all inspect jobs are executed failed or not
+  Given I am authorized as "admin" with password "admin"
+ 
   Scenario: Create an Image profile with suse-manager server hostname
   Given I am authorized as "admin" with password "admin"
   And I follow "Images" in the left menu
   And I follow "Profiles" in the left menu
   And I follow "Create"
-  And I enter "suse_key" as "label"
+  And I enter "Realsuse" as "label"
+  And I select "galaxy-registry" from "imageStore"
+  #FIXME: create the stuff on gitllab
+  #FIXME: just use test-branch for testing other branch then master
+  And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile-inspect" as "path"
+  And I click on "create-btn"
+ 
+  Scenario: Create an Image profile with suse-manager server hostname
+  Given I am authorized as "admin" with password "admin"
+  And I follow "Images" in the left menu
+  And I follow "Profiles" in the left menu
+  And I follow "Create"
+  And I enter "Realsuse_key" as "label"
   And I select "galaxy-registry" from "imageStore"
   And I select "1-MINION-TEST" from "activationKey"
   #FIXME: create the stuff on gitllab
@@ -134,8 +149,15 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile-inspect" as "path"
   And I click on "create-btn"
 
-  Scenario: Verify that all inspect jobs are executed failed or not
+  #FIXME: this will not work locally at moment because
+  # we hardcode the hostname inside the images !
+  Scenario: Build the real images with and without activation key
   Given I am authorized as "admin" with password "admin"
- 
-  Scenario: Verify the property of activation-key image
+  # At moment phantomjs has problemes with datapickler so we use xmlrpc-api
+  And I schedule the build of image "Realsuse" via xmlrpc-call  
+  And I schedule the build of image "Realsuse_key" via xmlrpc-call  
+  And I schedule the build of image "Realsuse" with tag "metally-version" via xmlrpc-call 
+  And I schedule the build of image "Realsuse_key" with tag "jazzy-version" via xmlrpc-call 
+
+  Scenario: Verify the effects of activation-key on image
   Given I am authorized as "admin" with password "admin"
