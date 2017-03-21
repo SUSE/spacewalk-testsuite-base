@@ -37,6 +37,7 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I enter "registry.mgr.suse.de" as "uri"
   And I click on "create-btn"
   
+  #Fixme
   Scenario: Image Store GUI validation: wrong label
   Given I am authorized as "admin" with password "admin"
   And I follow "Images" in the left menu
@@ -115,14 +116,18 @@ Feature:  Build Container images with SUSE Manager. Basic image
   # FIXME: Can we verify via xmplrpc the status of images? build or not?
   # then we can remove the sleep.
   And I wait for "50" seconds
-
+  # Fixme: to implement
   Scenario: Verify the status of images.
   Given I am authorized as "admin" with password "admin"
   And I navigate to images build webpage
   Then I verify that all container images were built correctly in the gui
-
+  
   Scenario: Verify that all inspect jobs are executed failed or not
   Given I am authorized as "admin" with password "admin"
+  #FIXME: TO IMPLEMENT
+  Scenario: Delete tagged images via 
+  Given I am authorized as "admin" with password "admin"
+  Then I delete the image "suse_key" via xmlrpc-call
  
   Scenario: Create an Image profile with suse-manager server hostname
   Given I am authorized as "admin" with password "admin"

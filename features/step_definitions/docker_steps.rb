@@ -39,6 +39,12 @@ And(/^I navigate to images build webpage$/) do
   visit("https://#{$server_fullhostname}/rhn/manager/cm/build")
 end
 
+And(/^I delete the image "([^"]*)" via xmlrpc-call$/) do |image|
+  cont_op.login('admin', 'admin')
+  # get the image id
+  cont_op.deleteImage(imageid)
+end
+
 And(/^I schedule the build of image "([^"]*)" via xmlrpc-call$/) do |image|
   cont_op.login('admin', 'admin')
   # empty by default
