@@ -77,5 +77,21 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I navigate to images build webpage
   Then I verify that all container images were built correctly in the gui
 
+  Scenario: Create an Image profile with suse-manager server hostname
+  Given I am authorized as "admin" with password "admin"
+  And I follow "Images" in the left menu
+  And I follow "Profiles" in the left menu
+  And I follow "Create"
+  And I enter "suse_key" as "label"
+  And I select "galaxy-registry" from "imageStore"
+  And I select "1-MINION-TEST" from "activationKey"
+  #FIXME: create the stuff on gitllab
+  #FIXME: just use test-branch for testing other branch then master
+  And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile-inspect" as "path"
+  And I click on "create-btn"
+
+  Scenario: Verify that all inspect jobs are executed failed or not
+  Given I am authorized as "admin" with password "admin"
+ 
   Scenario: Verify the property of activation-key image
   Given I am authorized as "admin" with password "admin"
