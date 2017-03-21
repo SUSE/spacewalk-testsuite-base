@@ -36,6 +36,21 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I enter "galaxy-registry" as "label"
   And I enter "registry.mgr.suse.de" as "uri"
   And I click on "create-btn"
+  
+  Scenario: Image Store GUI validation: wrong label
+  Given I am authorized as "admin" with password "admin"
+  And I follow "Images" in the left menu
+  And I follow "Stores" in the left menu
+  And I enter "${uptime!**_+}" as "label"
+  And I enter "registry.mgr.suse.de" as "uri"
+  And I click on "create-btn"
+
+  Scenario: Image Store GUI validation: missing parameter
+  Given I am authorized as "admin" with password "admin"
+  And I follow "Images" in the left menu
+  And I follow "Stores" in the left menu
+  And I enter "${uptime!**_+}" as "label"
+  And I click on "create-btn"
 
   Scenario: Create a simple Image profile without act-key
   Given I am authorized as "admin" with password "admin"
@@ -45,6 +60,35 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I enter "suse_simply" as "label"
   And I select "galaxy-registry" from "imageStore"
   And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile" as "path"
+  And I click on "create-btn"
+
+ Scenario: Image profile validation: wrong label
+  Given I am authorized as "admin" with password "admin"
+  And I follow "Images" in the left menu
+  And I follow "Profiles" in the left menu
+  And I follow "Create"
+  And I enter "${uptime!**_+}" as "label"
+  And I select "galaxy-registry" from "imageStore"
+  And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile" as "path"
+  And I click on "create-btn"
+
+ Scenario: Image profile validation: wrong path
+  Given I am authorized as "admin" with password "admin"
+  And I follow "Images" in the left menu
+  And I follow "Profiles" in the left menu
+  And I follow "Create"
+  And I enter "suse_simply2" as "label"
+  And I select "galaxy-registry" from "imageStore"
+  And I enter "/root/linuxPinguinols" as "path"
+  And I click on "create-btn"
+
+ Scenario: Image profile validation: missing parameter
+  Given I am authorized as "admin" with password "admin"
+  And I follow "Images" in the left menu
+  And I follow "Profiles" in the left menu
+  And I follow "Create"
+  And I enter "suse_simply2" as "label"
+  And I select "galaxy-registry" from "imageStore"
   And I click on "create-btn"
 
   Scenario: Create an Image profile with activation-key
