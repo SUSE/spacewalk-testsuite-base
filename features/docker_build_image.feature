@@ -109,6 +109,8 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I schedule the build of image "suse_key" via xmlrpc-call  
   And I schedule the build of image "suse_simply" via xmlrpc-call  
 
+  # Scenario: Build an Image via gui
+
   Scenario: Build same images with different tags
   Given I am authorized as "admin" with password "admin"
   And I schedule the build of image "suse_key" with tag "Latest_key-activation1" via xmlrpc-call 
@@ -123,8 +125,8 @@ Feature:  Build Container images with SUSE Manager. Basic image
   Then I verify that all container images were built correctly in the gui
   
   #FIXME: TO IMPLEMENT
-  Scenario: Verify that all inspect jobs are executed failed or not
-  Given I am authorized as "admin" with password "admin"
+#  Scenario: Verify that all inspect jobs are executed failed or not
+#  Given I am authorized as "admin" with password "admin"
 
   Scenario: Delete tagged images via xmlrpc
   Given I am authorized as "admin" with password "admin"
