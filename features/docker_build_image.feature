@@ -38,21 +38,21 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I click on "create-btn"
   
   #Fixme
-  Scenario: Image Store GUI validation: wrong label
-  Given I am authorized as "admin" with password "admin"
-  And I follow "Images" in the left menu
-  And I follow "Stores" in the left menu
-  And I enter "${uptime!**_+}" as "label"
-  And I enter "registry.mgr.suse.de" as "uri"
-  And I click on "create-btn"
-
-  Scenario: Image Store GUI validation: missing parameter
-  Given I am authorized as "admin" with password "admin"
-  And I follow "Images" in the left menu
-  And I follow "Stores" in the left menu
-  And I enter "${uptime!**_+}" as "label"
-  And I click on "create-btn"
-
+##  Scenario: Image Store GUI validation: wrong label
+#  Given I am authorized as "admin" with password "admin"
+#  And I follow "Images" in the left menu
+#  And I follow "Stores" in the left menu
+#  And I enter "${uptime!**_+}" as "label"
+#  And I enter "registry.mgr.suse.de" as "uri"
+#  And I click on "create-btn"
+#
+#  Scenario: Image Store GUI validation: missing parameter
+#  Given I am authorized as "admin" with password "admin"
+#  And I follow "Images" in the left menu
+#  And I follow "Stores" in the left menu
+#  And I enter "${uptime!**_+}" as "label"
+#  And I click on "create-btn"
+#
   Scenario: Create a simple Image profile without act-key
   Given I am authorized as "admin" with password "admin"
   And I follow "Images" in the left menu
@@ -63,35 +63,35 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile" as "path"
   And I click on "create-btn"
 
- Scenario: Image profile validation: wrong label
-  Given I am authorized as "admin" with password "admin"
-  And I follow "Images" in the left menu
-  And I follow "Profiles" in the left menu
-  And I follow "Create"
-  And I enter "${uptime!**_+}" as "label"
-  And I select "galaxy-registry" from "imageStore"
-  And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile" as "path"
-  And I click on "create-btn"
-
- Scenario: Image profile validation: wrong path
-  Given I am authorized as "admin" with password "admin"
-  And I follow "Images" in the left menu
-  And I follow "Profiles" in the left menu
-  And I follow "Create"
-  And I enter "suse_simply2" as "label"
-  And I select "galaxy-registry" from "imageStore"
-  And I enter "/root/linuxPinguinols" as "path"
-  And I click on "create-btn"
-
- Scenario: Image profile validation: missing parameter
-  Given I am authorized as "admin" with password "admin"
-  And I follow "Images" in the left menu
-  And I follow "Profiles" in the left menu
-  And I follow "Create"
-  And I enter "suse_simply2" as "label"
-  And I select "galaxy-registry" from "imageStore"
-  And I click on "create-btn"
-
+# Scenario: Image profile validation: wrong label
+#  Given I am authorized as "admin" with password "admin"
+#  And I follow "Images" in the left menu
+#  And I follow "Profiles" in the left menu
+#  And I follow "Create"
+#  And I enter "${uptime!**_+}" as "label"
+#  And I select "galaxy-registry" from "imageStore"
+#  And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile" as "path"
+#  And I click on "create-btn"
+#
+# Scenario: Image profile validation: wrong path
+#  Given I am authorized as "admin" with password "admin"
+#  And I follow "Images" in the left menu
+#  And I follow "Profiles" in the left menu
+#  And I follow "Create"
+#  And I enter "suse_simply2" as "label"
+#  And I select "galaxy-registry" from "imageStore"
+#  And I enter "/root/linuxPinguinols" as "path"
+#  And I click on "create-btn"
+#
+# Scenario: Image profile validation: missing parameter
+#  Given I am authorized as "admin" with password "admin"
+#  And I follow "Images" in the left menu
+#  And I follow "Profiles" in the left menu
+#  And I follow "Create"
+#  And I enter "suse_simply2" as "label"
+#  And I select "galaxy-registry" from "imageStore"
+#  And I click on "create-btn"
+#
   Scenario: Create an Image profile with activation-key
   Given I am authorized as "admin" with password "admin"
   And I follow "Images" in the left menu
@@ -116,19 +116,24 @@ Feature:  Build Container images with SUSE Manager. Basic image
   # FIXME: Can we verify via xmplrpc the status of images? build or not?
   # then we can remove the sleep.
   And I wait for "50" seconds
-  # Fixme: to implement
+
   Scenario: Verify the status of images.
   Given I am authorized as "admin" with password "admin"
   And I navigate to images build webpage
   Then I verify that all container images were built correctly in the gui
   
+  #FIXME: TO IMPLEMENT
   Scenario: Verify that all inspect jobs are executed failed or not
   Given I am authorized as "admin" with password "admin"
-  #FIXME: TO IMPLEMENT
-  Scenario: Delete tagged images via 
+
+  Scenario: Delete tagged images via xmlrpc
   Given I am authorized as "admin" with password "admin"
   Then I delete the image "suse_key" via xmlrpc-call
- 
+
+#  Scenario: Delete image via gui
+#  Given I am authorized as "admin" with password "admin"
+
+# TODO1: 
   Scenario: Create an Image profile with suse-manager server hostname
   Given I am authorized as "admin" with password "admin"
   And I follow "Images" in the left menu
@@ -141,7 +146,7 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I enter "https://gitlab.suse.de/galaxy/suse-manager-containers.git#:test-profile-inspect" as "path"
   And I click on "create-btn"
  
-  Scenario: Create an Image profile with suse-manager server hostname
+  Scenario: Create an Image profile with activation-key and serverhostname
   Given I am authorized as "admin" with password "admin"
   And I follow "Images" in the left menu
   And I follow "Profiles" in the left menu
@@ -156,13 +161,13 @@ Feature:  Build Container images with SUSE Manager. Basic image
 
   #FIXME: this will not work locally at moment because
   # we hardcode the hostname inside the images !
-  Scenario: Build the real images with and without activation key
-  Given I am authorized as "admin" with password "admin"
+#  Scenario: Build the real images with and without activation key
+#  Given I am authorized as "admin" with password "admin"
   # At moment phantomjs has problemes with datapickler so we use xmlrpc-api
-  And I schedule the build of image "Realsuse" via xmlrpc-call  
-  And I schedule the build of image "Realsuse_key" via xmlrpc-call  
-  And I schedule the build of image "Realsuse" with tag "metally-version" via xmlrpc-call 
-  And I schedule the build of image "Realsuse_key" with tag "jazzy-version" via xmlrpc-call 
+#  And I schedule the build of image "Realsuse" via xmlrpc-call  
+#  And I schedule the build of image "Realsuse_key" via xmlrpc-call  
+#  And I schedule the build of image "Realsuse" with tag "metally-version" via xmlrpc-call 
+#  And I schedule the build of image "Realsuse_key" with tag "jazzy-version" via xmlrpc-call 
 
-  Scenario: Verify the effects of activation-key on image
-  Given I am authorized as "admin" with password "admin"
+#  Scenario: Verify the effects of activation-key on image
+#  Given I am authorized as "admin" with password "admin"

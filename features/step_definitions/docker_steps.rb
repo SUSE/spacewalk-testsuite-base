@@ -39,9 +39,13 @@ And(/^I navigate to images build webpage$/) do
   visit("https://#{$server_fullhostname}/rhn/manager/cm/build")
 end
 
-And(/^I delete the image "([^"]*)" via xmlrpc-call$/) do |image|
+And(/^I delete the image "([^"]*)" via xmlrpc-call$/) do |imagetodel|
   cont_op.login('admin', 'admin')
   # get the image id
+  images_list = []
+  images_list = cont_op.listImages("admin")
+  refute_nil(images_list, "ERROR: no images were retrieved.")
+  imageid = images_list.select { |imagelisted| imagelisted == imagetodel } 
   cont_op.deleteImage(imageid)
 end
 
