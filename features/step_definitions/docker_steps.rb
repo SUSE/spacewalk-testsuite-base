@@ -17,7 +17,6 @@ def retrieve_minion_id
               .select { |s| s['name'] == $minion_fullhostname }
               .map { |s| s['id'] }.first
   refute_nil(minion_id, "Minion #{$minion_fullhostname} is not yet registered?")
-  minion_id
 end
 
 And(/^I select sle-minion hostname in Build Host$/) do
@@ -36,6 +35,20 @@ And(/^I verify that all container images were built correctly in the gui$/) do
   raise "an image was not built correctly" unless find(:xpath, "//*[contains(@title, 'Built')]")
 end
 
+And(/^I navigate to images build webpage$/) do
+  visit("https://#{$server_fullhostname}/rhn/manager/cm/build")
+end
+
+And(/^I delete the image "([^"]*)" via xmlrpc-call$/) do |imagetodel|
+  cont_op.login('admin', 'admin')
+  # get the image id
+  images_list = []
+  images_list = cont_op.listImages("admin")
+  refute_nil(images_list, "ERROR: no images were retrieved.")
+  imageid = images_list.select { |imagelisted| imagelisted == imagetodel } 
+  cont_op.deleteImage(imageid)
+end
+
 And(/^I schedule the build of image "([^"]*)" via xmlrpc-call$/) do |image|
   cont_op.login('admin', 'admin')
   # empty by default
@@ -46,10 +59,10 @@ And(/^I schedule the build of image "([^"]*)" via xmlrpc-call$/) do |image|
   cont_op.scheduleImageBuild(image, version_build, build_hostid, date_build)
 end
 
-And(/^I schedule the build of image "([^"]*)" with version "([^"]*)" via xmlrpc-call$/) do |image, version|
+And(/^I schedule the build of image "([^"]*)" with tag "([^"]*)" via xmlrpc-call$/) do |image, tag|
   cont_op.login('admin', 'admin')
   # empty by default
-  version_build = version
+  version_build = tag
   build_hostid = retrieve_minion_id
   now = DateTime.now
   date_build = XMLRPC::DateTime.new(now.year, now.month, now.day, now.hour, now.min, now.sec)
