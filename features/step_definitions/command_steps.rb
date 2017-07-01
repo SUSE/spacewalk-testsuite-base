@@ -2,6 +2,16 @@
 # Licensed under the terms of the MIT license.
 require 'timeout'
 
+Then(/^I reboot sles vms$/) do
+  # reboot sles based vms since they were updated, including suma server
+  vms_to_reboot = [$ssh_minion_fullhostname, $minion_fullhostname, $client_fullhostname, ENV['TESTHOST']]
+  vms_to_reboot.each do |vm|
+    sshcmd("shutdown -r -t 30 > /dev/null 2> /dev/null & ", host: vm)
+    sleep 30
+    checkRestart(vm, 120)
+  end
+end
+
 def checkShutdown(host, time_out)
   cmd = "ping -c1 #{host}"
   Timeout.timeout(time_out) do
