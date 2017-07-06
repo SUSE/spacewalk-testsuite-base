@@ -39,11 +39,11 @@ Feature: register a salt-minion via bootstrap
     Then I wait for "3" seconds
     And I expand the results
     Then I should see "SuSE-release" in the command output
- 
+
   Scenario: Check spacecmd system ID of bootstrapped minion.
     Given I am on the Systems overview page of this "sle-minion"
     Then I run spacecmd listevents for sle-minion
- 
+
   Scenario: Delete sles-minion system profile
     Given I am on the Systems overview page of this "sle-minion"
     When I follow "Delete System"
@@ -122,7 +122,7 @@ Feature: register a salt-minion via bootstrap
     And I should see a "Confirm System Profile Deletion" text
     And I click on "Delete Profile"
     Then I should see a "has been deleted" text
-      
+
   Scenario: bootstrap a sles minion with wrong hostname
      Given I am authorized
      And I go to the bootstrapping page
@@ -146,7 +146,7 @@ Feature: register a salt-minion via bootstrap
      And I click on "Bootstrap"
      Then I wait until i see "Permission denied (publickey,keyboard-interactive)." text
      And I should not see a "GenericSaltError({" text
-      
+
  Scenario: bootstrap a sles minion with wrong ssh-port-number
      Given I am authorized
      And I go to the bootstrapping page

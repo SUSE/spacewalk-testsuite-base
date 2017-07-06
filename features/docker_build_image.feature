@@ -40,13 +40,13 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I click on "Update Activation Key"
   Then I should see a "Activation key Docker testing has been modified" text
 
-  Scenario: Assign to the sles-minion the property container build host 
+  Scenario: Assign to the sles-minion the property container build host
   Given I am on the Systems overview page of this "sle-minion"
   And I follow "Details" in the content area
   And I follow "Properties" in the content area
   And I check "container_build_host"
   When I click on "Update Properties"
-  Then I should see a "Container Build Host type has been applied." text 
+  Then I should see a "Container Build Host type has been applied." text
   And I should see a "Note: This action will not result in state application" text
   And I should see a "To apply the state, either use the states page or run `state.highstate` from the command line." text
   And I should see a "System properties changed" text
@@ -122,8 +122,8 @@ Feature:  Build Container images with SUSE Manager. Basic image
 
   Scenario: Build same images with different versions
   Given I am authorized as "admin" with password "admin"
-  And I schedule the build of image "suse_key" with version "Latest_key-activation1" via xmlrpc-call 
-  And I schedule the build of image "suse_simply" with version "Latest_simply" via xmlrpc-call 
+  And I schedule the build of image "suse_key" with version "Latest_key-activation1" via xmlrpc-call
+  And I schedule the build of image "suse_simply" with version "Latest_simply" via xmlrpc-call
   And I verify that all "5" container images were built correctly in the gui
 
   Scenario: Delete image via xmlrpc calls
@@ -133,7 +133,7 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And The image "suse_simply" with version "Latest_key-activation1" doesn't exist via xmlrpc-call
   And The image "suse_simply" with version "Latest_simply" doesn't exist via xmlrpc-call
   And I schedule the build of image "suse_simply" with version "Latest_simply" via xmlrpc-call
-  And I schedule the build of image "suse_key" with version "Latest_key-activation1" via xmlrpc-call 
+  And I schedule the build of image "suse_key" with version "Latest_key-activation1" via xmlrpc-call
   And I wait for "60" seconds
 
   Scenario: Verify the status of images.
@@ -149,7 +149,7 @@ Feature:  Build Container images with SUSE Manager. Basic image
   And I select sle-minion hostname in Build Host
   And I click on "submit-btn"
   And I wait for "5" seconds
-  Then I should see a "GUI_BUILDED_IMAGE" text 
+  Then I should see a "GUI_BUILDED_IMAGE" text
 
  Scenario: Login as docker img_admin and build an image
   Given I am authorized as "docker" with password "docker"
