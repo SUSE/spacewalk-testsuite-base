@@ -22,8 +22,8 @@ Feature: Reboot required after patch
 
   Scenario: enable old-packages for test a "needing reboot"
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -e Devel_Galaxy_BuildRepo" on "sle-client"
-    And I run "zypper -n ref" on "sle-client"
+    And I run "zypper mr -e Devel_Galaxy_BuildRepo" on "sle-client"
+    And I run "zypper ref" on "sle-client"
     And I run "zypper -n in --oldpackage andromeda-dummy-1.0-4.1" on "sle-client"
     And I run "rhn_check -vvv" on "sle-client"
     When I follow "Admin"
@@ -56,4 +56,4 @@ Feature: Reboot required after patch
 
   Scenario: Cleanup: remove virgo-dummy and restore non-update repo (needing-reboot test)
     And I run "zypper -n rm andromeda-dummy" on "sle-client"
-    And I run "zypper -n mr -d Devel_Galaxy_BuildRepo" on "sle-client"
+    And I run "zypper mr -d Devel_Galaxy_BuildRepo" on "sle-client"

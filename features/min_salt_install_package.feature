@@ -5,8 +5,8 @@ Feature: Install a patch the client via salt through the UI
 
   Scenario: Pre-requisite: Install virgo-dummy-1.0 packages
     Given I am on the Systems overview page of this "sle-minion"
-    And I run "zypper -n mr -e Devel_Galaxy_BuildRepo" on "sle-minion"
-    And I run "zypper -n ref" on "sle-minion"
+    And I run "zypper mr -e Devel_Galaxy_BuildRepo" on "sle-minion"
+    And I run "zypper ref" on "sle-minion"
     And I run "zypper -n in --oldpackage virgo-dummy-1.0" on "sle-minion" without error control
     And I follow "Software" in the content area
     And I follow "List / Remove" in the content area
@@ -35,9 +35,9 @@ Feature: Install a patch the client via salt through the UI
 
   Scenario: CLEANUP: Remove virgo-dummy packages from sle-minion
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -d Devel_Galaxy_BuildRepo" on "sle-minion"
+    And I run "zypper mr -d Devel_Galaxy_BuildRepo" on "sle-minion"
     And I run "zypper -n rm virgo-dummy" on "sle-minion" without error control
-    And I run "zypper -n ref" on "sle-minion"
+    And I run "zypper ref" on "sle-minion"
     When I follow "Admin"
     And I follow "Task Schedules"
     And I follow "errata-cache-default"

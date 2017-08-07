@@ -5,8 +5,8 @@ Feature: System package list in the UI is updated if packages are manually insta
 
   Scenario: Prequisite: Install milkyway-dummy-1.0 packages
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -e Devel_Galaxy_BuildRepo" on "sle-minion"
-    And I run "zypper -n ref" on "sle-minion"
+    And I run "zypper mr -e Devel_Galaxy_BuildRepo" on "sle-minion"
+    And I run "zypper ref" on "sle-minion"
     And I run "zypper -n in --oldpackage milkyway-dummy-1.0" on "sle-minion" without error control
     When I follow "Admin"
     And I follow "Task Schedules"
@@ -41,9 +41,9 @@ Feature: System package list in the UI is updated if packages are manually insta
 
   Scenario: CLEANUP: Remove milkyway-dummy packages from sle-minion
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -d Devel_Galaxy_BuildRepo" on "sle-minion"
+    And I run "zypper mr -d Devel_Galaxy_BuildRepo" on "sle-minion"
     And I run "zypper -n rm milkyway-dummy" on "sle-minion" without error control
-    And I run "zypper -n ref" on "sle-minion"
+    And I run "zypper ref" on "sle-minion"
     When I follow "Admin"
     And I follow "Task Schedules"
     And I follow "errata-cache-default"

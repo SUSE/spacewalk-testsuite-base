@@ -8,9 +8,9 @@ Feature: CVE Audit
 
   Scenario: Prequisite: downgrade milkyway-dummy to lower version
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -e Devel_Galaxy_BuildRepo" on "sle-client"
+    And I run "zypper mr -e Devel_Galaxy_BuildRepo" on "sle-client"
     And I run "zypper -n in --oldpackage milkyway-dummy-1.0-2.1" on "sle-client"
-    And I run "zypper -n ref" on "sle-client"
+    And I run "zypper ref" on "sle-client"
     And I run "rhn_check -vvv" on "sle-client"
     When I follow "Admin"
     And I follow "Task Schedules"
@@ -123,7 +123,7 @@ Feature: CVE Audit
 
   Scenario: CLEANUP: Remove milkyway installed packages
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -d Devel_Galaxy_BuildRepo" on "sle-client" without error control
+    And I run "zypper mr -d Devel_Galaxy_BuildRepo" on "sle-client" without error control
     And I run "zypper -n rm milkyway-dummy" on "sle-client" without error control
     And I run "rhn_check -vvv" on "sle-client" without error control
     When I follow "Admin"

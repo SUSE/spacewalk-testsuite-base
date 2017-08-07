@@ -8,8 +8,8 @@ Feature: Check patches
 
   Scenario: PRE-Requirement: enable old-packages for testing patches installation
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -e Devel_Galaxy_BuildRepo" on "sle-client"
-    And I run "zypper -n ref" on "sle-client"
+    And I run "zypper mr -e Devel_Galaxy_BuildRepo" on "sle-client"
+    And I run "zypper ref" on "sle-client"
     And I run "zypper -n in --oldpackage andromeda-dummy-1.0-4.1" on "sle-client"
     And I run "zypper -n in --oldpackage virgo-dummy-1.0-1.1" on "sle-client"
     And I run "rhn_check -vvv" on "sle-client"
@@ -59,8 +59,8 @@ Feature: Check patches
 
   Scenario: CLEANUP: Remove installed packages
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -d Devel_Galaxy_BuildRepo" on "sle-client" without error control
-    And I run "zypper -n ref" on "sle-client" without error control
+    And I run "zypper mr -d Devel_Galaxy_BuildRepo" on "sle-client" without error control
+    And I run "zypper ref" on "sle-client" without error control
     And I run "zypper -n rm --oldpackage andromeda-dummy-1.0-4.1" on "sle-client" without error control
     And I run "zypper -n rm --oldpackage virgo-dummy-1.0-1.1" on "sle-client" without error control
     And I run "rhn_check -vvv" on "sle-client" without error control
