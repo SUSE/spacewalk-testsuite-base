@@ -6,11 +6,11 @@ Feature: Test action chaining
 
   Scenario: Prequisite: downgrade repo to lower version
     Given I am authorized as "admin" with password "admin"
-    And I run "zypper -n mr -e Devel_Galaxy_BuildRepo" on "sle-client"
+    And I run "zypper mr -e Devel_Galaxy_BuildRepo" on "sle-client"
     And I run "zypper -n rm andromeda-dummy" on "sle-client" without error control
     And I run "zypper -n rm virgo-dummy" on "sle-client" without error control
     And I run "zypper -n in --oldpackage andromeda-dummy-1.0-4.1" on "sle-client"
-    And I run "zypper -n ref" on "sle-client"
+    And I run "zypper ref" on "sle-client"
     And I run "rhn_check -vvv" on "sle-client"
     When I follow "Admin"
     And I follow "Task Schedules"
@@ -244,4 +244,4 @@ Feature: Test action chaining
   Scenario: Cleanup: remove pkgs and repo used in action chain
     When I run "zypper -n rm andromeda-dummy" on "sle-client" without error control
     And I run "zypper -n rm virgo-dummy" on "sle-client" without error control
-    And I run "zypper -n mr -d Devel_Galaxy_BuildRepo" on "sle-client" without error control
+    And I run "zypper mr -d Devel_Galaxy_BuildRepo" on "sle-client" without error control

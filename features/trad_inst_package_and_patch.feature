@@ -19,7 +19,7 @@ Feature: Install a package to the trad-client
     And "virgo-dummy-2.0-1.1" is installed on "client"
 
   Scenario: enable old-packages for test a patch install
-    And I run "zypper -n mr -e Devel_Galaxy_BuildRepo" on "sle-client"
+    And I run "zypper mr -e Devel_Galaxy_BuildRepo" on "sle-client"
     And I run "zypper -n in --oldpackage andromeda-dummy-1.0-4.1" on "sle-client"
     And I run "rhn_check -vvv" on "sle-client"
 
@@ -48,5 +48,5 @@ Feature: Install a package to the trad-client
   Scenario: Cleanup: remove virgo-dummy and restore non-update repo
     And I run "zypper -n rm andromeda-dummy" on "sle-client"
     And I run "zypper -n rm virgo-dummy" on "sle-client"
-    And I run "zypper -n mr -d Devel_Galaxy_BuildRepo" on "sle-client"
+    And I run "zypper mr -d Devel_Galaxy_BuildRepo" on "sle-client"
     And I run "rhn_check -vvv" on "sle-client"
