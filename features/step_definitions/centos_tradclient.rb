@@ -32,11 +32,13 @@ And(/^execute some tests for centos_trad_client$/) do
   # --1) package refresh--
   @centosid = retrieve_server_id($ceos_minion_fullhostname)
   now = DateTime.now
-  date_schedule_now = XMLRPC::DateTime.new(now.year, now.month, now.day, now.hour, now.min, now.sec)
+  date_schedule_now = XMLRPC::DateTime.new(now.year, now.month, now.day,
+                                           now.hour, now.min, now.sec)
   @cli.call('system.schedulePackageRefresh', @sid, @centosid, date_schedule_now)
   # --2) run schedule script --
   script = "#! /usr/bin/bash \n uptime && ls"
-  id_script = @cli.call('system.scheduleScriptRun', @sid, @centosid, 'root', 'root', 500, script, date_schedule_now)
+  id_script = @cli.call('system.scheduleScriptRun', @sid, @centosid,
+                        'root', 'root', 500, script, date_schedule_now)
   $ceos_minion.run('rhn_check -vvv', true, 500, 'root')
   waitActionComplete(id_script)
   # --3)  schedule reboot

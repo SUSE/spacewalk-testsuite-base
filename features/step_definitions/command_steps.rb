@@ -35,7 +35,8 @@ Then(/^I wait until "([^"]*)" service is up and running on "([^"]*)"$/) do |serv
 end
 
 When(/^I execute mgr\-sync "([^"]*)" with user "([^"]*)" and password "([^"]*)"$/) do |arg1, u, p|
-  $command_output = sshcmd("echo -e '#{u}\n#{p}\n' | mgr-sync #{arg1}", ignore_err: true)[:stdout]
+  $command_output = sshcmd("echo -e '#{u}\n#{p}\n' | mgr-sync #{arg1}",
+                           ignore_err: true)[:stdout]
 end
 
 When(/^I execute mgr\-sync "([^"]*)"$/) do |arg1|
@@ -52,7 +53,8 @@ end
 
 When(/^I execute mgr\-bootstrap "([^"]*)"$/) do |arg1|
   arch = 'x86_64'
-  $command_output = sshcmd("mgr-bootstrap --activation-keys=1-SUSE-PKG-#{arch} #{arg1}")[:stdout]
+  $command_output = sshcmd('mgr-bootstrap --activation-keys' \
+    "=1-SUSE-PKG-#{arch} #{arg1}")[:stdout]
 end
 
 When(/^I fetch "([^"]*)" from server$/) do |arg1|
@@ -104,14 +106,18 @@ end
 
 When(/^I copy "([^"]*)"$/) do |arg1|
   user = 'root@'
-  $command_output = `echo | scp -o StrictHostKeyChecking=no #{user}$TESTHOST:#{arg1} . 2>&1`
-  raise "Execute command failed: #{$ERROR_INFO}: #{$command_output}" unless $CHILD_STATUS.success?
+  $command_output = "echo | scp -o StrictHostKeyChecking=no #{user} " \
+    "$TESTHOST:#{arg1} . 2>&1"
+  raise "Execute command failed: #{$ERROR_INFO}: #{$command_output}" unless
+      $CHILD_STATUS.success?
 end
 
 When(/^I copy to server "([^"]*)"$/) do |arg1|
   user = 'root@'
-  $command_output = `echo | scp -o StrictHostKeyChecking=no #{arg1} #{user}$TESTHOST: 2>&1`
-  raise "Execute command failed: #{$ERROR_INFO}: #{$command_output}" unless $CHILD_STATUS.success?
+  $command_output = "echo | scp -o StrictHostKeyChecking=no #{arg1} " \
+    "#{user}$TESTHOST: 2>&1"
+  raise "Execute command failed: #{$ERROR_INFO}: #{$command_output}" unless
+      $CHILD_STATUS.success?
 end
 
 Then(/^the pxe-default-profile should be enabled$/) do
@@ -125,7 +131,8 @@ Then(/^the pxe-default-profile should be disabled$/) do
 end
 
 Then(/^the cobbler report contains "([^"]*)"$/) do |arg1|
-  output = sshcmd("cobbler system report --name #{$client_fullhostname}:1", ignore_err: true)[:stdout]
+  output = sshcmd("cobbler system report --name #{$client_fullhostname}:1",
+                  ignore_err: true)[:stdout]
   raise "Not found: #{output}" unless output.include?(arg1)
 end
 
@@ -169,7 +176,8 @@ Then(/^I wont get "([^"]*)"$/) do |arg1|
 end
 
 Then(/^I wait for mgr-sync refresh is finished$/) do
-  $server.run_until_ok('ls /var/lib/spacewalk/scc/scc-data/*organizations_orders.json')
+  $server.run_until_ok('ls /var/lib/spacewalk/scc/' \
+    'scc-data/*organizations_orders.json')
 end
 
 Then(/^I should see "(.*?)" in the output$/) do |arg1|
@@ -177,13 +185,15 @@ Then(/^I should see "(.*?)" in the output$/) do |arg1|
 end
 
 Then(/^Service "([^"]*)" is enabled on the Server$/) do |service|
-  output = sshcmd("systemctl is-enabled '#{service}'", ignore_err: true)[:stdout]
+  output = sshcmd("systemctl is-enabled '#{service}'",
+                  ignore_err: true)[:stdout]
   output.chomp!
   raise if output != 'enabled'
 end
 
 Then(/^Service "([^"]*)" is running on the Server$/) do |service|
-  output = sshcmd("systemctl is-active '#{service}'", ignore_err: true)[:stdout]
+  output = sshcmd("systemctl is-active '#{service}'",
+                  ignore_err: true)[:stdout]
   output.chomp!
   raise if output != 'active'
 end
@@ -191,7 +201,8 @@ end
 # snapshots
 When(/^I take a snapshot "([^"]*)"$/) do |name|
   $sshout = ''
-  $sshout = `echo | ssh -o StrictHostKeyChecking=no root@$VHOST qemu-img snapshot -c #{name} $IMGDIR/$VMDISK.qcow2`
+  $sshout = 'echo | ssh -o StrictHostKeyChecking=no root@$VHOST qemu-img' \
+    "snapshot -c #{name} $IMGDIR/$VMDISK.qcow2"
   puts 'Creating snapsnot failed...' unless $CHILD_STATUS.success?
 end
 
@@ -274,7 +285,8 @@ And(/^I register the centos7 as tradclient$/) do
               '--sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT \\' \
               '--activationkey=1-MINION-TEST'
 
-  $ceos_minion.run("#{wget} #{cert_path} http://#{$server_ip}/pub/RHN-ORG-TRUSTED-SSL-CERT", true, 500)
+  $ceos_minion.run("#{wget} #{cert_path} http://#{$server_ip}" \
+                   '/pub/RHN-ORG-TRUSTED-SSL-CERT', true, 500)
   $ceos_minion.run(register)
 end
 
@@ -315,9 +327,12 @@ And(/I create dockerized minions$/) do
   # build everything
   distros = %w[rhel6 rhel7 sles11sp4 sles12 sles12sp1]
   distros.each do |os|
-    $minion.run("docker build https://gitlab.suse.de/galaxy/suse-manager-containers.git#master:minion-fabric/#{os}/ -t #{os}", true, 2000)
-    spawn_minion = '/etc/salt/minion; dbus-uuidgen > /etc/machine-id; salt-minion -l trace'
-    $minion.run("docker run -h #{os} -d --entrypoint '/bin/sh' #{os} -c \"echo \'#{master}\' > #{spawn_minion}\"")
+    $minion.run('docker build https://gitlab.suse.de/galaxy/suse-manager' \
+      "-containers.git#master:minion-fabric/#{os}/ -t #{os}", true, 2000)
+    spawn_minion = '/etc/salt/minion; dbus-uuidgen > /etc/machine-id; ' \
+      'salt-minion -l trace'
+    $minion.run("docker run -h #{os} -d --entrypoint '/bin/sh' #{os}" \
+      "-c \"echo \'#{master}\' > #{spawn_minion}\"")
     puts "minion #{os} created and running"
   end
   # accept all the key on master, wait dinimically for last key
@@ -325,8 +340,7 @@ And(/I create dockerized minions$/) do
     Timeout.timeout(DEFAULT_TIMEOUT) do
       loop do
         out, _code = $server.run('salt-key -l unaccepted')
-        # if we see the last os, we can break
-        if out.include? distros.last
+        if out.include? distros.last # if we see the last os, we can break
           $server.run('salt-key -A -y')
           break
         end
@@ -380,7 +394,8 @@ And(/^I wait until the package "(.*?)" has been cached on this "(.*?)"$/) do |pk
   node = get_target(host)
   Timeout.timeout(DEFAULT_TIMEOUT) do
     loop do
-      _out, code = node.run("ls /var/cache/zypp/packages/susemanager:test-channel-x86_64/getPackage/#{pkg_name}.rpm", false)
+      _out, code = node.run('ls /var/cache/zypp/packages/susemanager:' \
+        "test-channel-x86_64/getPackage/#{pkg_name}.rpm", false)
       break if code.zero?
       sleep 1
     end

@@ -21,7 +21,7 @@ Given(/^salt-minion is configured on "(.*?)"$/) do |minion|
     file_delete(target, key)
     puts "Key #{key} has been removed on minion"
   end
-  cmd = " echo  \'master : #{$server_ip}\' > /etc/salt/minion.d/susemanager.conf"
+  cmd = "echo  \'master : #{$server_ip}\' > /etc/salt/minion.d/susemanager.conf"
   target.run(cmd, false)
   step %(I start salt-master)
   step %(I start salt-minion on "#{minion}")
@@ -46,7 +46,8 @@ Given(/^the salt-master can reach "(.*?)"$/) do |minion|
         out, _code = $server.run("salt #{target_fullhostname} test.ping")
         if out.include?(target_fullhostname) && out.include?('True')
           finished = Time.now
-          puts "Took #{finished.to_i - start.to_i} seconds to contact the minion"
+          puts "Took #{finished.to_i - start.to_i}" \
+               ' seconds to contact the minion'
           break
         end
         sleep(1)
@@ -149,7 +150,9 @@ Then(/^the list of the "(.*?)" keys should contain "(.*?)" hostname$/) do |key_t
     raise 'no valid name of minion given! '
   end
   $output, _code = $server.run("salt-key --list #{key_type}", false)
-  assert_match(target_fullhostname, $output, "minion #{target_fullhostname} is not listed as #{key_type} key on salt-master #{$output}")
+  assert_match(target_fullhostname, $output,
+               "minion #{target_fullhostname} is not listed as" \
+               "#{key_type} key on salt-master #{$output}")
 end
 
 When(/^I wait until no Salt job is running on "(.*?)"$/) do |minion|
@@ -291,7 +294,8 @@ When(/^I get OS information of "(.*?)" from the Master$/) do |minion|
   else
     raise 'no valid name of minion given! '
   end
-  $output, _code = $server.run("salt #{target_fullhostname} grains.get osfullname")
+  $output, _code =
+    $server.run("salt #{target_fullhostname} grains.get osfullname")
 end
 
 Then(/^it should contain a "(.*?)" text$/) do |content|
@@ -316,7 +320,8 @@ And(/^"(.*?)" is not registered in Spacewalk$/) do |host|
   target_fullhostname = get_target_fullhostname(host)
   @rpc = XMLRPCSystemTest.new(ENV['TESTHOST'])
   @rpc.login('admin', 'admin')
-  sid = @rpc.listSystems.select { |s| s['name'] == target_fullhostname }.map { |s| s['id'] }.first
+  sid = @rpc.listSystems.select { |s| s['name'] == target_fullhostname }
+            .map { |s| s['id'] }.first
   @rpc.deleteSystem(sid) if sid
   refute_includes(@rpc.listSystems.map { |s| s['id'] }, target_fullhostname)
 end
@@ -514,7 +519,8 @@ When(/^I manually install the "([^"]*)" formula on the server$/) do |package|
 end
 
 When(/^I ([^"]*) the "([^"]*)" formula$/) do |action, formula|
-  # Complicated code because the checkbox is not a <input type=checkbox> but an <i>
+  # Complicated code because the checkbox is not
+  # an <input type=checkbox> but an <i>
   xpath_query = "//a[@id = '#{formula}']/i[@class = 'fa fa-lg fa-square-o']" if action == 'check'
   xpath_query = "//a[@id = '#{formula}']/i[@class = 'fa fa-lg fa-check-square-o']" if action == 'uncheck'
   if all(:xpath, xpath_query).any?
@@ -527,7 +533,8 @@ When(/^I ([^"]*) the "([^"]*)" formula$/) do |action, formula|
 end
 
 Then(/^the "([^"]*)" formula should be ([^"]*)$/) do |formula, action|
-  # Complicated code because the checkbox is not a <input type=checkbox> but an <i>
+  # Complicated code because the checkbox is not
+  # an <input type=checkbox> but an <i>
   xpath_query = "//a[@id = '#{formula}']/i[@class = 'fa fa-lg fa-square-o']" if action == 'checked'
   xpath_query = "//a[@id = '#{formula}']/i[@class = 'fa fa-lg fa-check-square-o']" if action == 'unchecked'
   raise "Checkbox is not #{action}" if all(:xpath, xpath_query).any?
@@ -599,11 +606,13 @@ Then(/^the pillar data for "([^"]*)" should be "([^"]*)" on "([^"]*)"$/) do |key
     target = $ssh_minion_ip
     cmd = 'salt-ssh'
     extra_cmd = '-i --roster-file=/tmp/tmp_roster_tests -w -W'
-    $server.run("printf '#{target}:\n  host: #{target}\n  user: root\n  passwd: linux' > /tmp/tmp_roster_tests")
+    $server.run("printf '#{target}:\n  host: #{target}\n  " \
+                "user: root\n  passwd: linux' > /tmp/tmp_roster_tests")
   else
     raise 'Invalid target'
   end
-  output, _code = $server.run("#{cmd} '#{target}' pillar.get '#{key}' #{extra_cmd}")
+  output, _code = $server.run("#{cmd} '#{target}' " \
+                              "pillar.get '#{key}' #{extra_cmd}")
   puts output
   if value == ''
     raise unless output.split("\n").length == 1
@@ -661,7 +670,8 @@ When(/^I reject "(.*?)" from the Pending section$/) do |minion|
   else
     raise 'no valid name of minion given! '
   end
-  xpath_query = "//tr[td[contains(.,'#{target_hostname}')]]//button[@title = 'reject']"
+  xpath_query = "//tr[td[contains(.,'#{target_hostname}')]]" \
+                "//button[@title = 'reject']"
   raise unless find(:xpath, xpath_query).click
 end
 
@@ -673,7 +683,8 @@ When(/^I delete "(.*?)" from the Rejected section$/) do |minion|
   else
     raise 'no valid name of minion given! '
   end
-  xpath_query = "//tr[td[contains(.,'#{target_hostname}')]]//button[@title = 'delete']"
+  xpath_query = "//tr[td[contains(.,'#{target_hostname}')]]" \
+                "//button[@title = 'delete']"
   raise unless find(:xpath, xpath_query).click
 end
 
@@ -699,7 +710,8 @@ When(/^I accept "(.*?)" key$/) do |minion|
   else
     raise 'no valid name of minion given! '
   end
-  xpath_query = "//tr[td[contains(.,'#{target_hostname}')]]//button[@title = 'accept']"
+  xpath_query = "//tr[td[contains(.,'#{target_hostname}')]]" \
+                "//button[@title = 'accept']"
   raise unless find(:xpath, xpath_query).click
 end
 

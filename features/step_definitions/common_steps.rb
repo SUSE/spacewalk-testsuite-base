@@ -8,7 +8,8 @@ end
 Then(/^I download the SSL certificate$/) do
   cert_path = '/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT'
   wget = 'wget --no-check-certificate -O'
-  $client.run("#{wget} #{cert_path} http://#{$server_ip}/pub/RHN-ORG-TRUSTED-SSL-CERT", true, 500, 'root')
+  $client.run("#{wget} #{cert_path} http://#{$server_ip}/" \
+              'pub/RHN-ORG-TRUSTED-SSL-CERT', true, 500, 'root')
   $client.run("ls #{cert_path}")
 end
 
@@ -49,7 +50,8 @@ end
 # bare metal
 When(/^I check the ram value$/) do
   get_ram_value = "grep MemTotal /proc/meminfo |awk '{print $2}'"
-  ram_value, _local, _remote, _code = $client.test_and_store_results_together(get_ram_value, 'root', 600)
+  ram_value, _local, _remote, _code =
+    $client.test_and_store_results_together(get_ram_value, 'root', 600)
   ram_value = ram_value.gsub(/\s+/, '')
   ram_mb = ram_value.to_i / 1024
   step %(I should see a "#{ram_mb}" text)
@@ -57,7 +59,8 @@ end
 
 When(/^I check the MAC address value$/) do
   get_mac_address = 'cat /sys/class/net/eth0/address'
-  mac_address, _local, _remote, _code = $client.test_and_store_results_together(get_mac_address, 'root', 600)
+  mac_address, _local, _remote, _code =
+    $client.test_and_store_results_together(get_mac_address, 'root', 600)
   mac_address = mac_address.gsub(/\s+/, '')
   mac_address.downcase!
   step %(I should see a "#{mac_address}" text)
@@ -65,7 +68,8 @@ end
 
 Then(/^I should see the CPU frequency of the client$/) do
   get_cpu_freq = "lscpu  | grep 'CPU MHz'" # | awk '{print $4}'"
-  cpu_freq, _local, _remote, _code = $client.test_and_store_results_together(get_cpu_freq, 'root', 600)
+  cpu_freq, _local, _remote, _code =
+    $client.test_and_store_results_together(get_cpu_freq, 'root', 600)
   get_cpu = cpu_freq.gsub(/\s+/, '')
   cpu = get_cpu.split('.')
   cpu = cpu[0].gsub(/[^\d]/, '')
@@ -76,7 +80,8 @@ When(/^I should see the power is "([^"]*)"$/) do |arg1|
   within(:xpath, "//*[@for='powerStatus']/..") do
     10.times do
       break if has_content?(arg1)
-      find(:xpath, '//button[@value="Get status"]').click unless has_content?(arg1)
+      find(:xpath, '//button[@value="Get status"]').click unless
+        has_content?(arg1)
       sleep 3
     end
     raise unless has_content?(arg1)
@@ -131,18 +136,21 @@ end
 
 When(/^I perform a nagios check patches for "([^"]*)"$/) do |host|
   target_fullhostname = get_target_fullhostname(host)
-  command = "/usr/lib/nagios/plugins/check_suma_patches #{target_fullhostname} > /tmp/nagios.out"
+  command = '/usr/lib/nagios/plugins/check_suma_patches ' \
+    "#{target_fullhostname} > /tmp/nagios.out"
   $server.run(command, false, 600, 'root')
 end
 
 When(/^I perform a nagios check last event for "([^"]*)"$/) do |host|
   target_fullhostname = get_target_fullhostname(host)
-  command = "/usr/lib/nagios/plugins/check_suma_lastevent #{target_fullhostname} > /tmp/nagios.out"
+  command = '/usr/lib/nagios/plugins/check_suma_lastevent ' \
+    "#{target_fullhostname} > /tmp/nagios.out"
   $server.run(command, false, 600, 'root')
 end
 
 When(/^I perform an invalid nagios check patches$/) do
-  command = '/usr/lib/nagios/plugins/check_suma_patches does.not.exist > /tmp/nagios.out'
+  command = '/usr/lib/nagios/plugins/check_suma_patches ' \
+    'does.not.exist > /tmp/nagios.out'
   $server.run(command, false, 600, 'root')
 end
 
@@ -152,7 +160,8 @@ Then(/^I should see CRITICAL: 1 critical patch pending$/) do
 end
 
 Then(/^I should see Completed: OpenSCAP xccdf scanning scheduled by admin/) do
-  command = 'grep "Completed: OpenSCAP xccdf scanning scheduled by admin" /tmp/nagios.out'
+  command = 'grep "Completed: OpenSCAP xccdf scanning ' \
+    'scheduled by admin" /tmp/nagios.out'
   $server.run(command, true, 600, 'root')
 end
 
@@ -180,7 +189,9 @@ Then(/create distro "([^"]*)" as user "([^"]*)" with password "([^"]*)"/) do |di
   ct = CobblerTest.new
   ct.login(user, pwd)
   raise 'distro ' + distro + ' already exists' if ct.distro_exists(distro)
-  ct.distro_create(distro, '/install/SLES11-SP1-x86_64/DVD1/boot/x86_64/loader/linux', 'install/SLES11-SP1-x86_64/DVD1/boot/x86_64/loader/initrd')
+  ct.distro_create(distro,
+                   '/install/SLES11-SP1-x86_64/DVD1/boot/x86_64/loader/linux',
+                   'install/SLES11-SP1-x86_64/DVD1/boot/x86_64/loader/initrd')
 end
 
 Then(/^trigger cobbler system record\(not for ssh\-push tradclient\)$/) do
@@ -213,7 +224,8 @@ Then(/create profile "([^"]*)" as user "([^"]*)" with password "([^"]*)"/) do |a
 end
 
 When(/^I attach the file "(.*)" to "(.*)"$/) do |path, field|
-  attach_file(field, File.join(File.dirname(__FILE__), '/../upload_files/', path))
+  attach_file(field, File.join(File.dirname(__FILE__),
+                               '/../upload_files/', path))
 end
 
 When(/I view system with id "([^"]*)"/) do |arg1|
@@ -242,7 +254,8 @@ Then(/^I should not have '([^']*)' in the metadata for "([^"]*)"$/) do |text, ho
   target = $client
   arch, _code = target.run('uname -m')
   arch.chomp!
-  cmd = "zgrep '#{text}' #{client_raw_repodata_dir("test-channel-#{arch}")}/primary.xml.gz"
+  cmd = "zgrep '#{text}' #{client_raw_repodata_dir("test-channel-#{arch}")}" \
+    '/primary.xml.gz'
   target.run(cmd, true, 500, 'root')
 end
 
@@ -251,19 +264,23 @@ Then(/^"([^"]*)" should exists in the metadata for "([^"]*)"$/) do |file, host|
   target = $client
   arch, _code = target.run('uname -m')
   arch.chomp!
-  raise unless file_exists?(target, "#{client_raw_repodata_dir("test-channel-#{arch}")}/#{file}")
+  raise unless
+    file_exists?(target,
+                 "#{client_raw_repodata_dir("test-channel-#{arch}")}/#{file}")
 end
 
 Then(/^I should have '([^']*)' in the patch metadata$/) do |text|
   arch, _code = $client.run('uname -m')
   arch.chomp!
-  cmd = "zgrep '#{text}' #{client_raw_repodata_dir("test-channel-#{arch}")}/updateinfo.xml.gz"
+  cmd = "zgrep '#{text}' " \
+    "#{client_raw_repodata_dir("test-channel-#{arch}")}/updateinfo.xml.gz"
   $client.run(cmd, true, 500, 'root')
 end
 
 # channel steps
 Then(/^I should see package "([^"]*)"$/) do |package|
-  raise unless has_xpath?("//div[@class=\"table-responsive\"]/table/tbody/tr/td/a[contains(.,'#{package}')]")
+  raise unless has_xpath?('//div[@class=\"table-responsive\"]' \
+    "/table/tbody/tr/td/a[contains(.,'#{package}')]")
 end
 
 Given(/^I am on the manage software channels page$/) do
@@ -285,7 +302,8 @@ end
 
 When(/^I push package "([^"]*)" into "([^"]*)" channel$/) do |arg1, arg2|
   srvurl = "http://#{ENV['TESTHOST']}/APP"
-  command = "rhnpush --server=#{srvurl} -u admin -p admin --nosig -c #{arg2} #{arg1} "
+  command = "rhnpush --server=#{srvurl} " \
+    "-u admin -p admin --nosig -c #{arg2} #{arg1} "
   $server.run(command, true, 500, 'root')
   $server.run('ls -lR /var/spacewalk/packages', true, 500, 'root')
 end
@@ -325,7 +343,8 @@ When(/^I view the primary subscription list for asdf$/) do
 end
 
 When(/^I select "([^\"]*)" as a product for the "([^\"]*)" architecture$/) do |product, architecture|
-  within(:xpath, "(//span[contains(text(), '#{product}')]/ancestor::tr[td[contains(text(), '#{architecture}')]])[1]") do
+  within(:xpath, "(//span[contains(text(), '#{product}')]/ancestor::" \
+    "tr[td[contains(text(), '#{architecture}')]])[1]") do
     raise unless find('button.product-add-btn').click
     begin
       # wait to finish scheduling
@@ -375,15 +394,21 @@ When(/^I click the Add Product button$/) do
 end
 
 When(/^I verify the products were added$/) do
-  output = sshcmd('echo -e "admin\nadmin\n" | mgr-sync list channels', ignore_err: true)
-  sle_module = '[I] SLE-Module-Legacy12-Updates for x86_64 SP2 Legacy Module 12 x86_64 [sle-module-legacy12-updates-x86_64-sp2]'
-  raise unless output[:stdout].include? '[I] SLES12-SP2-Pool for x86_64 SUSE Linux Enterprise Server 12 SP2 x86_64 [sles12-sp2-pool-x86_64]'
-  raise unless output[:stdout].include? '[I] SLE-Manager-Tools12-Pool x86_64 SP2 SUSE Manager Tools [sle-manager-tools12-pool-x86_64-sp2]'
+  output = sshcmd('echo -e "admin\nadmin\n" | mgr-sync list channels',
+                  ignore_err: true)
+  sle_module = '[I] SLE-Module-Legacy12-Updates for x86_64 SP2 Legacy ' \
+    'Module 12 x86_64 [sle-module-legacy12-updates-x86_64-sp2]'
+  raise unless output[:stdout].include? '[I] SLES12-SP2-Pool for x86_64 ' \
+    'SUSE Linux Enterprise Server 12 SP2 x86_64 [sles12-sp2-pool-x86_64]'
+  raise unless output[:stdout].include? '[I] SLE-Manager-Tools12-Pool ' \
+    'x86_64 SP2 SUSE Manager Tools [sle-manager-tools12-pool-x86_64-sp2]'
   raise unless output[:stdout].include? sle_module
 end
 
 When(/^I click the channel list of product "(.*?)" for the "(.*?)" architecture$/) do |product, architecture|
-  within(:xpath, "//span[contains(text(), '#{product}')]/ancestor::tr[td[contains(text(), '#{architecture}')]]") do
+  within(:xpath, '//span[contains(text(), ' \
+         "'#{product}')]/ancestor::tr[td[contains(text(), " \
+         "'#{architecture}')]]") do
     raise unless find('.product-channels-btn').click
   end
 end
@@ -399,14 +424,16 @@ When(/^I change the local file "([^"]*)" to "([^"]*)"$/) do |filename, content|
 end
 
 Then(/^I should see a table line with "([^"]*)", "([^"]*)", "([^"]*)"$/) do |arg1, arg2, arg3|
-  within(:xpath, "//div[@class=\"table-responsive\"]/table/tbody/tr[.//td[contains(.,'#{arg1}')]]") do
+  within(:xpath, '//div[@class=\"table-responsive\"]' \
+         "/table/tbody/tr[.//td[contains(.,'#{arg1}')]]") do
     raise unless find_link(arg2)
     raise unless find_link(arg3)
   end
 end
 
 Then(/^I should see a table line with "([^"]*)", "([^"]*)"$/) do |arg1, arg2|
-  within(:xpath, "//div[@class=\"table-responsive\"]/table/tbody/tr[.//td[contains(.,'#{arg1}')]]") do
+  within(:xpath, '//div[@class=\"table-responsive\"]' \
+         "/table/tbody/tr[.//td[contains(.,'#{arg1}')]]") do
     raise unless find_link(arg2)
   end
 end
@@ -480,13 +507,16 @@ Then(/^I should see "(.*?)" as link$/) do |host|
 end
 
 Then(/^config-actions are enabled$/) do
-  unless file_exists?($client, '/etc/sysconfig/rhn/allowed-actions/configfiles/all')
-    raise 'config actions are disabled: /etc/sysconfig/rhn/allowed-actions/configfiles/all does not exist on client'
+  unless file_exists?($client,
+                      '/etc/sysconfig/rhn/allowed-actions/configfiles/all')
+    raise 'config actions are disabled: /etc/sysconfig/rhn/allowed-actions' \
+      '/configfiles/all does not exist on client'
   end
 end
 
 Then(/^remote-commands are enabled$/) do
   unless file_exists?($client, '/etc/sysconfig/rhn/allowed-actions/script/run')
-    raise 'remote-commands are disabled: /etc/sysconfig/rhn/allowed-actions/script/run does not exist'
+    raise 'remote-commands are disabled: /etc/sysconfig/rhn/' \
+      'allowed-actions/script/run does not exist'
   end
 end

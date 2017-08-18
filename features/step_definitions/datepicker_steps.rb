@@ -32,9 +32,12 @@ Given(/^I pick "([^"]*)" as date$/) do |arg1|
   picker_years = picker.find('.datepicker-years', visible: false)
   picker_months = picker.find('.datepicker-months', visible: false)
   picker_days = picker.find('.datepicker-days', visible: false)
-  picker_current_decade = picker_years.find('th.datepicker-switch', visible: false)
-  picker_current_year = picker_months.find('th.datepicker-switch', visible: false)
-  picker_current_month = picker_days.find('th.datepicker-switch', visible: false)
+  picker_current_decade = picker_years.find('th.datepicker-switch',
+                                            visible: false)
+  picker_current_year = picker_months.find('th.datepicker-switch',
+                                           visible: false)
+  picker_current_month = picker_days.find('th.datepicker-switch',
+                                          visible: false)
   picker_current_month.click if picker_days.visible?
   picker_current_year.click if picker_months.visible?
   decade_start, decade_end = picker_current_decade.text.split('-').map(&:to_i)

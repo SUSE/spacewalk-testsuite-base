@@ -13,24 +13,29 @@ module ImageProfile
     cont_op = XMLRPCImageTest.new(ENV['TESTHOST'])
     cont_op.login('admin', 'admin')
     # create delete profile test
-    cont_op.createProfile('fakeone', 'dockerfile', 'galaxy-registry', 'BiggerPathBiggerTest', '')
+    cont_op.createProfile('fakeone', 'dockerfile', 'galaxy-registry',
+                          'BiggerPathBiggerTest', '')
     cont_op.deleteProfile('fakeone')
-    cont_op.createProfile('fakeone', 'dockerfile', 'galaxy-registry', 'BiggerPathBiggerTest', '1-DOCKER-TEST')
+    cont_op.createProfile('fakeone', 'dockerfile', 'galaxy-registry',
+                          'BiggerPathBiggerTest', '1-DOCKER-TEST')
     cont_op.deleteProfile('fakeone')
   end
 
   def custom_values
     cont_op = XMLRPCImageTest.new(ENV['TESTHOST'])
     cont_op.login('admin', 'admin')
-    cont_op.createProfile('fakeone', 'dockerfile', 'galaxy-registry', 'BiggerPathBiggerTest', '')
+    cont_op.createProfile('fakeone', 'dockerfile', 'galaxy-registry',
+                          'BiggerPathBiggerTest', '')
     cont_op.createCustomKey('arancio', 'test containers')
     values = {}
     values['arancio'] = 'arancia xmlrpc tests'
     cont_op.setProfileCustomValues('fakeone', values)
     pro_det = cont_op.getProfileCustomValues('fakeone')
-    assert_equal(pro_det['arancio'], 'arancia xmlrpc tests', 'setting custom profile value failed')
+    assert_equal(pro_det['arancio'], 'arancia xmlrpc tests',
+                 'setting custom profile value failed')
     pro_type = cont_op.listImageProfileTypes
-    assert_equal(pro_type.length, 1, 'support at moment only one type of Profile!')
+    assert_equal(pro_type.length, 1,
+                 'support at moment only one type of Profile!')
     assert_equal(pro_type[0], 'dockerfile', 'type is not dockerfile?')
     key = ['arancio']
     cont_op.deleteProfileCustomValues('fakeone', key)
@@ -47,7 +52,8 @@ module ImageProfile
     # test listImageProfiles method
     ima_profiles = cont_op.listImageProfiles
     imagelabel = ima_profiles.select { |image| image['label'] = 'fakeone' }
-    assert_equal(imagelabel[0]['label'], 'fakeone', 'label of container should be fakeone!')
+    assert_equal(imagelabel[0]['label'], 'fakeone',
+                 'label of container should be fakeone!')
     # test set value and get value call
     details = {}
     details['storeLabel'] = 'galaxy-registry'
@@ -56,7 +62,8 @@ module ImageProfile
     cont_op.setProfileDetails('fakeone', details)
     cont_detail = cont_op.getDetails('fakeone')
     assert_equal(cont_detail['label'], 'fakeone', 'label test fail!')
-    assert_equal(cont_detail['imageType'], 'dockerfile', 'imagetype test fail!')
+    assert_equal(cont_detail['imageType'], 'dockerfile',
+                 'imagetype test fail!')
     cont_op.deleteProfile('fakeone')
   end
 end
@@ -74,7 +81,8 @@ def retrieve_minion_id
   minion_id = systems
               .select { |s| s['name'] == $minion_fullhostname }
               .map { |s| s['id'] }.first
-  refute_nil(minion_id, "Minion #{$minion_fullhostname} is not yet registered?")
+  refute_nil(minion_id,
+             "Minion #{$minion_fullhostname} is not yet registered?")
   minion_id
 end
 
@@ -93,7 +101,8 @@ end
 And(/^I verify that all "([^"]*)" container images were built correctly in the gui$/) do |count|
   begin
     Timeout.timeout(DEFAULT_TIMEOUT) do
-      raise 'error detected while building images' if has_xpath?("//*[contains(@title, 'Failed')]")
+      raise 'error detected while building images' if
+        has_xpath?("//*[contains(@title, 'Failed')]")
       break if has_xpath?("//*[contains(@title, 'Built')]", count: count)
       sleep 5
       step %(I navigate to images webpage)
@@ -109,7 +118,8 @@ And(/^I schedule the build of image "([^"]*)" via xmlrpc-call$/) do |image|
   version_build = ''
   build_hostid = retrieve_minion_id
   now = DateTime.now
-  date_build = XMLRPC::DateTime.new(now.year, now.month, now.day, now.hour, now.min, now.sec)
+  date_build = XMLRPC::DateTime.new(now.year, now.month, now.day, now.hour,
+                                    now.min, now.sec)
   cont_op.scheduleImageBuild(image, version_build, build_hostid, date_build)
 end
 
@@ -119,7 +129,8 @@ And(/^I schedule the build of image "([^"]*)" with version "([^"]*)" via xmlrpc-
   version_build = version
   build_hostid = retrieve_minion_id
   now = DateTime.now
-  date_build = XMLRPC::DateTime.new(now.year, now.month, now.day, now.hour, now.min, now.sec)
+  date_build = XMLRPC::DateTime.new(now.year, now.month, now.day, now.hour,
+                                    now.min, now.sec)
   cont_op.scheduleImageBuild(image, version_build, build_hostid, date_build)
 end
 
@@ -139,38 +150,39 @@ And(/^The image "([^"]*)" with version "([^"]*)" doesn't exist via xmlrpc-call$/
   cont_op.login('admin', 'admin')
   images_list = cont_op.listImages
   images_list.each do |element|
-    raise "#{image_non_exist} should not exist anymore" if element['name'] == image_non_exist && element['version'] == version.strip
+    raise "#{image_non_exist} should not exist anymore" if
+      element['name'] == image_non_exist && element['version'] == version.strip
   end
 end
 
 # images stores tests
 And(/^I run image.store tests via xmlrpc$/) do
   cont_op.login('admin', 'admin')
-  # Test create and delete calls
-  # create and delete a store, even with invalid uri.
-  cont_op.createStore('fake_store', 'https://github.com/SUSE/spacewalk-testsuite-base', 'registry')
+  # Test create and delete calls and store, even with invalid uri.
+  cont_op.createStore('fake_store',
+                      'https://github.com/SUSE/spacewalk-testsuite-base',
+                      'registry')
   cont_op.deleteStore('fake_store')
   # test list images and list image types call
   store_typ = cont_op.listImageStoreTypes
-  assert_equal(store_typ.length, 1, 'we have only type support for Registry! New method added?! please update the tests')
-  assert_equal(store_typ[0]['label'], 'registry', 'imagestore label type should be registry!')
+  assert_equal(store_typ.length, 1, 'we have only type support for Registry! ' \
+               'New method added?! please update the tests')
   registry_list = cont_op.listImageStores
-  # print just for debug
-  puts registry_list
+  puts registry_list # print just for debug
   assert_equal(registry_list[0]['label'], 'galaxy-registry', 'label is galaxy!')
-  assert_equal(registry_list[0]['uri'], 'registry.mgr.suse.de', 'uri should be registry.mgr.suse.de')
-  # test setDetails call
-  # delete if test fail in the middle. delete image doesn't raise an error if image doesn't exists
-  cont_op.createStore('Norimberga', 'https://github.com/SUSE/spacewalk-testsuite-base', 'registry')
+  assert_equal(registry_list[0]['uri'], 'registry.mgr.suse.de',
+               'uri should be registry.mgr.suse.de')
+  # test setDetails call delete if test fail in the middle.
+  cont_op.createStore('Norimberga',
+                      'https://github.com/SUSE/spacewalk-testsuite-base',
+                      'registry')
   details_store = {}
   details_store['uri'] = 'Germania'
   details_store['username'] = ''
   details_store['password'] = ''
   cont_op.setDetails('Norimberga', details_store)
-  # test getDetails call
   details = cont_op.getDetailsStore('Norimberga')
   assert_equal(details['uri'], 'Germania', 'uri should be Germania')
-  assert_equal(details['username'], '', 'username should be empty')
   cont_op.deleteStore('Norimberga')
 end
 
@@ -202,7 +214,8 @@ Then(/I create "([^"]*)" random "([^"]*)" containers$/) do |count, image_input|
   count.to_i.times do
     version_build = SecureRandom.urlsafe_base64(10)
     now = DateTime.now
-    date_build = XMLRPC::DateTime.new(now.year, now.month, now.day, now.hour, now.min, now.sec)
+    date_build = XMLRPC::DateTime.new(now.year, now.month, now.day, now.hour,
+                                      now.min, now.sec)
     cont_op.scheduleImageBuild(image, version_build, build_hostid, date_build)
   end
 end

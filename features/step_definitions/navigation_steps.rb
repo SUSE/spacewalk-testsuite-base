@@ -173,7 +173,8 @@ end
 
 When(/^I follow "([^"]*)" on "(.*?)" row$/) do |text, host|
   target_fullhostname = get_target_fullhostname(host)
-  xpath_query = "//tr[td[contains(.,'#{target_fullhostname}')]]//a[contains(., '#{text}')]"
+  xpath_query = "//tr[td[contains(.,'#{target_fullhostname}')]]" \
+                "//a[contains(., '#{text}')]"
   raise unless find(:xpath, xpath_query).click
 end
 
@@ -184,7 +185,8 @@ end
 When(/^I click Systems, under Systems node$/) do
   find(:xpath, "//div[@id=\"nav\"]/nav/ul/li[contains(@class, 'active')
        and contains(@class, 'open')
-       and contains(@class,'node')]/ul/li/div/a/span[contains(.,'Systems')]").click
+       and contains(@class,'node')]
+       /ul/li/div/a/span[contains(.,'Systems')]").click
 end
 
 Given(/^I am not authorized$/) do
@@ -284,7 +286,8 @@ Given(/^I am on the active Users page$/) do
 end
 
 Then(/^Table row for "([^"]*)" should contain "([^"]*)"$/) do |arg1, arg2|
-  within(:xpath, "//div[@class=\"table-responsive\"]/table/tbody/tr[.//a[contains(.,'#{arg1}')]]") do
+  within(:xpath, "//div[@class=\"table-responsive\"]
+                  /table/tbody/tr[.//a[contains(.,'#{arg1}')]]") do
     raise unless has_content?(arg2)
   end
 end
@@ -317,7 +320,8 @@ end
 
 Then(/^I am logged-in$/) do
   raise unless page.find(:xpath, "//a[@href='/rhn/Logout.do']").visible?
-  raise unless page.has_content?('You have just created your first SUSE Manager user. To finalize your installation please use the Setup Wizard')
+  raise unless page.has_content?('You have just created your first SUSE ' \
+    'Manager user. To finalize your installation please use the Setup Wizard')
 end
 
 When(/^I go to the admin configuration page$/) do
@@ -343,7 +347,8 @@ Given(/^I am on the "([^"]*)" patches Details page$/) do |arg1|
 end
 
 Then(/^I should see an update in the list$/) do
-  raise unless has_xpath?('//div[@class="table-responsive"]/table/tbody/tr/td/a')
+  raise unless
+    has_xpath?('//div[@class="table-responsive"]/table/tbody/tr/td/a')
 end
 
 When(/^I check test channel$/) do
@@ -507,7 +512,8 @@ Then(/^I should see a "([^"]*)" button$/) do |arg1|
 end
 
 Then(/^I should see a "(.*?)" link in the text$/) do |linktext, text|
-  within(:xpath, "//p/strong[contains(normalize-space(string(.)), '#{text}')]") do
+  within(:xpath, "//p/strong[contains
+                  (normalize-space(string(.)), '#{text}')]") do
     assert has_xpath?("//a[text() = '#{linktext}']")
   end
 end
@@ -541,7 +547,8 @@ Then(/^I should see a "([^"]*)" or "([^"]*)" text in element "([^"]*)"$/) do |ar
 end
 
 Then(/^I should see a "([^"]*)" link in "([^"]*)" "([^"]*)"$/) do |arg1, arg2, arg3|
-  raise unless page.has_xpath?("//#{arg2}[@id='#{arg3}' or @class='#{arg3}']/a[text()='#{arg1}']")
+  raise unless page.has_xpath?("//#{arg2}[@id='#{arg3}' or
+                                @class='#{arg3}']/a[text()='#{arg1}']")
 end
 
 Then(/^I should see a "([^"]*)" link in the table (.*) column$/) do |link, column|
@@ -555,7 +562,8 @@ Then(/^I should see a "([^"]*)" link in the table (.*) column$/) do |link, colum
   end
   raise("Unknown column '#{column}'") unless idx
   # find(:xpath, "//table//thead//tr/td[#{idx + 1}]/a[text()='#{link}']")
-  raise unless page.has_xpath?("//table//tr/td[#{idx + 1}]//a[text()='#{link}']")
+  raise unless
+    page.has_xpath?("//table//tr/td[#{idx + 1}]//a[text()='#{link}']")
 end
 
 Then(/^I reload the page until it does contain a "([^"]*)" text in the table (.*) row$/) do |text, row|
@@ -574,7 +582,8 @@ Then(/^I reload the page until it does contain a "([^"]*)" text in the table (.*
       end
     end
   rescue Timeout::Error
-    raise "'#{text}' is not found in the '#{row}' row of the table after wait and reload page"
+    raise "'#{text}' is not found in the '#{row}' " \
+      'row of the table after wait and reload page'
   end
   raise unless found
 end
@@ -735,11 +744,13 @@ end
 When(/^I check "([^"]*)" in the list$/) do |arg1|
   within(:xpath, '//section') do
     # use div/div/div for cve audit which has two tables
-    row = first(:xpath, "//div[@class=\"table-responsive\"]/table/tbody/tr[.//td[contains(.,'#{arg1}')]]")
+    row = first(:xpath, "//div[@class=\"table-responsive\"]
+                        /table/tbody/tr[.//td[contains(.,'#{arg1}')]]")
     if row.nil?
       sleep 10
       $stderr.puts 'ERROR - try again'
-      row = first(:xpath, "//div[@class=\"table-responsive\"]/table/tbody/tr[.//td[contains(.,'#{arg1}')]]")
+      row = first(:xpath, "//div[@class=\"table-responsive\"]
+                          /table/tbody/tr[.//td[contains(.,'#{arg1}')]]")
     end
     row.first(:xpath, './/input[@type="checkbox"]').set(true)
   end
@@ -758,7 +769,9 @@ end
 When(/^I uncheck "([^"]*)" in the list$/) do |arg1|
   within(:xpath, '//section') do
     # use div/div/div for cve audit which has two tables
-    top_level_xpath_query = "//div[@class='table-responsive']/table/tbody/tr[.//td[contains(.,'#{arg1}')] and .//input[@type='checkbox' and @checked]]"
+    top_level_xpath_query = "//div[@class='table-responsive']/table/tbody/
+                            tr[.//td[contains(.,'#{arg1}')] and .//input
+                            [@type='checkbox' and @checked]]"
     row = first(:xpath, top_level_xpath_query)
     if row.nil?
       sleep 3
