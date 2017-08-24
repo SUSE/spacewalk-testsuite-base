@@ -355,13 +355,8 @@ end
 
 And(/^I wait until the package "(.*?)" has been cached on this "(.*?)"$/) do |pkg_name, host|
   node = get_target(host)
-  Timeout.timeout(DEFAULT_TIMEOUT) do
-    loop do
-      _out, code = node.run("ls /var/cache/zypp/packages/susemanager:test-channel-x86_64/getPackage/#{pkg_name}.rpm", false)
-      break if code.zero?
-      sleep 1
-    end
-  end
+  cmd = "ls /var/cache/zypp/packages/susemanager:test-channel-x86_64/getPackage/#{pkg_name}.rpm"
+  node.run_until_ok(cmd)
 end
 
 And(/^I create the "([^"]*)" bootstrap-repo for "([^"]*)" on the server$/) do |arch, target|

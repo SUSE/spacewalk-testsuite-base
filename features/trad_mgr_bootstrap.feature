@@ -16,7 +16,7 @@ Feature: mgr-bootstrap generation and registration
     When I fetch "pub/bootstrap/bootstrap-test.sh" from server
     And I run "sh ./bootstrap-test.sh" on "sle-client"
     Then I should see "sle-client" in spacewalk
-    And "man" is installed on "client"
+    And "man" is installed on "sle-client"
     And config-actions are enabled
     And remote-commands are enabled
 
