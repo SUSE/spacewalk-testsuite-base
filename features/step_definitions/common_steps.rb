@@ -271,15 +271,7 @@ Given(/^I am on the manage software channels page$/) do
 end
 
 Given(/^metadata generation finished for "([^"]*)"$/) do |channel|
-  50.times do
-    begin
-      sshcmd("ls /var/cache/rhn/repodata/#{channel}/updateinfo.xml.gz")
-    rescue
-      sleep 2
-    else
-      break
-    end
-  end
+  $server.run_until_ok("ls /var/cache/rhn/repodata/#{channel}/updateinfo.xml.gz")
 end
 
 When(/^I push package "([^"]*)" into "([^"]*)" channel$/) do |arg1, arg2|
