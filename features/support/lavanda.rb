@@ -6,19 +6,19 @@ require 'timeout'
 #  or $minion.run_until_ok etc.
 module LavandaBasic
   def hostname
-    hostname, _local, _remote, code = test_and_store_results_together('hostname', 'root', 500)
+    hostname, _local, _remote, code = test_and_store_results_together('hostname', 'root', DEFAULT_TIMEOUT)
     raise 'cannot get hostname for node' if code.nonzero?
-    hostname
+    hostname.strip
   end
 
   def full_hostname
-    full_hostname, _local, _remote, code = test_and_store_results_together('hostname -f', 'root', 500)
+    full_hostname, _local, _remote, code = test_and_store_results_together('hostname -f', 'root', DEFAULT_TIMEOUT)
     raise 'no full qualified hostname for node' if code.nonzero?
-    full_hostname
+    full_hostname.strip
   end
 
   # monkeypatch the run
-  def run(cmd, fatal = true, timeout = 200, user = 'root')
+  def run(cmd, fatal = true, timeout = DEFAULT_TIMEOUT, user = 'root')
     out, _lo, _rem, code = test_and_store_results_together(cmd, user, timeout)
     if fatal
       raise "FAIL: #{cmd} returned #{code}. output : #{out}" if code != 0
