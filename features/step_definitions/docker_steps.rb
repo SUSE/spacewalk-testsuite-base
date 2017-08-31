@@ -210,7 +210,7 @@ end
 And(/^I check that sles-minion exists otherwise bootstrap it$/) do
   ck_minion =  "salt #{$minion.full_hostname} test.ping"
   _out, code = $server.run(ck_minion, false)
-  if code.nonzero?
+  return if code.zero?
     # bootstrap minion
     steps %(
       Given I am authorized
@@ -226,5 +226,20 @@ And(/^I check that sles-minion exists otherwise bootstrap it$/) do
       And I wait for "150" seconds
       Then I should see a "Successfully bootstrapped host! Your system should appear in System Overview shortly." text
     )
-  end
+end
+
+Then(/^I configure docker only for sles12-min only$/) do
+ os_fam = get_os_version($minion)
+ return if os_fam[0,2].include? '11'
+ # configure build host only for 12 sles systems
+ steps %(
+  And I wait until no Salt job is running on "sle-minion"
+  And I run "zypper mr -e `grep -h SLE-Manager-Tools-12-x86_64] /etc/zypp/repos.d/* | sed 's/\[//' | sed 's/\]//'`" on "sle-minion"
+  And I run "zypper mr -e SLE-Module-Containers-SLE-12-x86_64-Pool" on "sle-minion"
+  And I run "zypper mr -e SLE-Module-Containers-SLE-12-x86_64-Update" on "sle-minion"
+  And I enable sles pool and update repo on "sle-minion"
+  And I run "zypper -n --gpg-auto-import-keys ref" on "sle-minion"
+  And I apply highstate on "sle-minion"
+  Then I wait until "docker" service is up and running on "sle-minion"
+ )
 end
