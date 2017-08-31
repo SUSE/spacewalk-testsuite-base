@@ -53,15 +53,7 @@ Feature:  Build Container images with SUSE Manager. Basic image
 
   Scenario: Apply the highstate to container buid host
   Given I am on the Systems overview page of this "sle-minion"
-  Then I should see a "[Container Build Host]" text
-  And I wait until no Salt job is running on "sle-minion"
-  And I run "zypper mr -e `grep -h SLE-Manager-Tools-12-x86_64] /etc/zypp/repos.d/* | sed 's/\[//' | sed 's/\]//'`" on "sle-minion"
-  And I run "zypper mr -e SLE-Module-Containers-SLE-12-x86_64-Pool" on "sle-minion"
-  And I run "zypper mr -e SLE-Module-Containers-SLE-12-x86_64-Update" on "sle-minion"
-  And I enable sles pool and update repo on "sle-minion"
-  And I run "zypper -n --gpg-auto-import-keys ref" on "sle-minion"
-  And I apply highstate on "sle-minion"
-  Then I wait until "docker" service is up and running on "sle-minion"
+  Then I configure docker only for sles12-min only
 
   Scenario: Create an Image Store without credentials
   Given I am authorized as "admin" with password "admin"
