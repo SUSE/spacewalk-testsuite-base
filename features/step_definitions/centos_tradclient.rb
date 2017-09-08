@@ -29,7 +29,7 @@ When(/^I authenticate to XML-RPC$/) do
   @sid = @cli.call('auth.login', 'admin', 'admin')
 end
 
-When(/^I refresh the packages on "([^"]*)" through XML-RPC$/ do |host|
+When(/^I refresh the packages on "([^"]*)" through XML-RPC$/) do |host|
   node = get_target(host)
   node_id = retrieve_server_id(node.full_hostname)
   now = DateTime.now
@@ -40,7 +40,7 @@ When(/^I refresh the packages on "([^"]*)" through XML-RPC$/ do |host|
   waitActionComplete(id_refresh)
 end
 
-When(/^I run a script on "([^"]*)" through XML-RPC$/ do |host|
+When(/^I run a script on "([^"]*)" through XML-RPC$/) do |host|
   node = get_target(host)
   node_id = retrieve_server_id(node.full_hostname)
   script = "#! /usr/bin/bash \n uptime && ls"
@@ -50,7 +50,7 @@ When(/^I run a script on "([^"]*)" through XML-RPC$/ do |host|
   waitActionComplete(id_script)
 end
 
-When(/^I reboot "([^"]*)" through XML-RPC$/ do |host|
+When(/^I reboot "([^"]*)" through XML-RPC$/) do |host|
   node = get_target(host)
   node_id = retrieve_server_id(node.full_hostname)
 
