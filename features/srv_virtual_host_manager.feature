@@ -56,6 +56,7 @@ Feature: Test "virtualhostmanager" Web UI.
     When I follow "Virtual Host Managers"
     And I follow "file-vmware"
     And I click on "Delete"
+    And I wait for "3" seconds
     And I click on "Delete" inside element "#delete-single-modal"
     Then I should see a "Virtual Host Manager has been deleted." text
      And I should see a "No Virtual Host Managers." text
