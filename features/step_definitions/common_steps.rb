@@ -449,12 +449,22 @@ And(/^I disable Suse container repos, but not for Sles11 systems$/) do
   disable_container_repos if code.zero?
 end
 
-And(/^I enable sles pool and update repo on "([^"]*)"$/) do |target|
-  node = get_target(target)
-  os_version = get_os_version(node)
-  arch, _code = node.run('uname -m')
-  puts node.run("zypper mr -e SLE-#{os_version}-#{arch.strip}-Update")
-  puts node.run("zypper mr -e SLE-#{os_version}-#{arch.strip}-Pool")
+And(/^I enable sles pool and update repo on "([^"]*)", but not for Sles11$/) do |_target|
+  def enable_pool
+    node = get_target(target)
+    os_version = get_os_version(node)
+    arch, _code = node.run('uname -m')
+    puts node.run("zypper mr -e SLE-#{os_version}-#{arch.strip}-Update")
+    puts node.run("zypper mr -e SLE-#{os_version}-#{arch.strip}-Pool")
+    steps %(
+      And I run "zypper -n --gpg-auto-import-keys ref" on "sle-minion"
+      And I apply highstate on "sle-minion"
+      Then I wait until "docker" service is up and running on "sle-minion"
+    )
+  end
+  _out, code = $minion.run('pidof systemd', false)
+  # only for sle12 and major systems
+  enable_pool if code.zero?
 end
 
 And(/^I disable sles pool and update repo on "([^"]*)"$/) do |target|
