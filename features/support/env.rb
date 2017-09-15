@@ -22,14 +22,6 @@ host = ENV['TESTHOST']
 require 'minitest/unit'
 World(MiniTest::Assertions)
 
-def restart_phantomjs
-  session_pool = Capybara.send('session_pool')
-  session_pool.each do |_mode, session|
-    driver = session.driver
-    driver.restart if driver.is_a?(Capybara::Poltergeist::Driver)
-  end
-end
-
 # basic support for rebranding of strings in the UI
 BRANDING = ENV['BRANDING'] || 'suse'
 
@@ -79,10 +71,4 @@ After do |scenario|
     encoded_img = page.driver.render_base64(:png, full: true)
     embed("data:image/png;base64,#{encoded_img}", 'image/png')
   end
-end
-
-# restart always before each feature, we spare ram and
-# avoid ram issues!
-Before do
-  restart_phantomjs
 end
