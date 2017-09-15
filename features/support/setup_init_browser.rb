@@ -36,6 +36,14 @@ def restart_phantomjs
   end
 end
 
+def capybara_setup_driver(driver, server)
+  Capybara.default_driver = :driver
+  Capybara.javascript_driver = :driver
+  Capybara.app_host = "https://#{server}"
+  # don't run own server on a random port
+  Capybara.run_server = false
+end
+
 # Returns current url
 def current_url
   driver.current_url
@@ -55,11 +63,8 @@ Capybara.register_driver :poltergeist do |app|
                                     window_size: [1920, 1080],
                                     debug: false)
 end
-Capybara.default_driver = :poltergeist
-Capybara.javascript_driver = :poltergeist
-Capybara.app_host = "https://#{server}"
-# don't run own server on a random port
-Capybara.run_server = false
+
+capybara_setup_driver('poltergeist', server)
 
 # screenshots
 After do |scenario|
