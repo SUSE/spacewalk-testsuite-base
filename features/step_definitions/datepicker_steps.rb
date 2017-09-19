@@ -9,12 +9,12 @@ def gap(th)
 end
 
 def days_find(picker_days, day)
-  day_xpath = <<-eos
+  day_xpath = <<-EOS
    //*[contains(concat(" ", normalize-space(@class), " "), " day ")
     and not (contains(concat(" ", normalize-space(@class), " "), " new "))
     and not(contains(concat(" ", normalize-space(@class), " "), " old "))
     and normalize-space(text())="#{day}"]
-   eos
+   EOS
   picker_days.find(:xpath, day_xpath).click
 end
 
