@@ -10,7 +10,7 @@ require 'capybara/cucumber'
 require File.join(File.dirname(__FILE__), 'cobbler_test')
 require 'simplecov'
 require 'minitest/unit'
-
+require 'selenium-webdriver'
 # FIXME: this 2 variable why, for what are the set?
 ENV['LANG'] = 'en_US.UTF-8'
 ENV['IGNORECERT'] = '1'
