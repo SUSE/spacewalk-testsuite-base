@@ -37,8 +37,8 @@ def restart_phantomjs
 end
 
 def capybara_setup_driver(driver, server)
-  Capybara.default_driver = :driver
-  Capybara.javascript_driver = :driver
+  Capybara.default_driver = driver.to_sym
+  Capybara.javascript_driver = driver.to_sym
   Capybara.app_host = "https://#{server}"
   # don't run own server on a random port
   Capybara.run_server = false
