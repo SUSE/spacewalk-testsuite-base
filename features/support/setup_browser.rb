@@ -64,13 +64,15 @@ Capybara.app_host = "https://#{server}"
 Capybara.run_server = false
 # At moment we have only phantomjs
 
+
+# FIXME
 # screenshots
-After do |scenario|
-  if scenario.failed?
-    encoded_img = page.driver.render_base64(:png, full: true)
-    embed("data:image/png;base64,#{encoded_img}", 'image/png')
-  end
-end
+#After do |scenario|
+#  if scenario.failed?
+#    encoded_img = page.driver.render_base64(:png, full: true)
+#    embed("data:image/png;base64,#{encoded_img}", 'image/png')
+#  end
+#end
 
 # restart always before each feature, we spare ram and
 # avoid ram issues!
