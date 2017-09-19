@@ -14,6 +14,7 @@ chrome_install() {
   wget https://dl.google.com/linux/linux_signing_key.pub
   rpm --import linux_signing_key.pub
   wget -N https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm  
+  zypper in google-chrome-stable_current_x86_64.rpm  
 }
 ## Install ChromeDriver.
 chrome_driver() {
@@ -32,4 +33,5 @@ dependency() {
 chrome_install
 chrome_driver
 
-dependency
+# try out if works without this
+# dependency
