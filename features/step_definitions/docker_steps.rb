@@ -92,7 +92,7 @@ end
 
 And(/^all "([^"]*)" container images should be built correctly in the GUI$/) do |count|
   # don't run this for sles11 (docker feature is not there)
-  return if sle11family($minion)
+  exit 0 if sle11family($minion)
   begin
     Timeout.timeout(DEFAULT_TIMEOUT) do
       raise 'error detected while building images' if has_xpath?("//*[contains(@title, 'Failed')]")
