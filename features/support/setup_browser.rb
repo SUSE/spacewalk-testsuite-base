@@ -53,7 +53,6 @@ Capybara.register_driver(:headless_chrome) do |app|
     timeout: 250,
     window_size: [1920, 1080],
     debug: false)
-  )
 end
 
 # Setups browser driver with capybara/poltergeist

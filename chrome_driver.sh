@@ -3,6 +3,7 @@
 # simply patch to make chrome on suse
 
 # Versions
+zypper in curl
 CHROME_DRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`
 SELENIUM_STANDALONE_VERSION=3.4.0
 SELENIUM_SUBDIR=$(echo "$SELENIUM_STANDALONE_VERSION" | cut -d"." -f-2)
