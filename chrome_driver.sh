@@ -25,6 +25,11 @@ chrome_driver() {
   sudo chmod 0755 /usr/local/bin/chromedriver
 }
 
+dependency() {
+  zypper -n in libgtk-3-0 libnsssharedhelper0 libgconfmm-2_6-1
+}
 #
 chrome_install
 chrome_driver
+
+dependency

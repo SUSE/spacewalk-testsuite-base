@@ -48,11 +48,11 @@ Capybara.register_driver(:headless_chrome) do |app|
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
-    desired_capabilities: capabilities,
-    js_errors: false,
-    timeout: 250,
-    window_size: [1920, 1080],
-    debug: false)
+    desired_capabilities: capabilities)
+#    js_errors: false,
+#    timeout: 250,
+#    window_size: [1920, 1080],
+#    debug: false)
 end
 
 # Setups browser driver with capybara/poltergeist
