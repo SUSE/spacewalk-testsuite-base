@@ -9,7 +9,6 @@ require 'capybara'
 require 'capybara/cucumber'
 require File.join(File.dirname(__FILE__), 'cobbler_test')
 require 'simplecov'
-require 'capybara/poltergeist'
 require 'minitest/unit'
 
 # FIXME: this 2 variable why, for what are the set?
@@ -29,37 +28,39 @@ def enable_assertions
   # include assertion globally
   World(MiniTest::Assertions)
 end
-# this class is for phantomjs initialization
-class PhantomjsInit
-  attr_reader :options
-  def initialize
-    @options = ['--debug=no', '--ignore-ssl-errors=yes',
-                '--ssl-protocol=TLSv1', '--web-security=false']
-  end
-end
 
 def restart_driver
   session_pool = Capybara.send('session_pool')
   session_pool.each_value do |session|
     driver = session.driver
-    driver.restart if driver.is_a?(Capybara::Poltergeist::Driver)
+    driver.restart
   end
 end
 
-# MAIN
-phantom = PhantomjsInit.new
-# Setups browser driver with capybara/poltergeist
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app,
-                                    phantomjs_options: phantom.options,
-                                    js_errors: false,
-                                    timeout: 250,
-                                    window_size: [1920, 1080],
-                                    debug: false)
+# MAIiN
+#
+
+Capybara.register_driver(:headless_chrome) do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: { args: %w[headless disable-gpu --disable-web-security] }
+  )
+
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    desired_capabilities: capabilities,
+    js_errors: false,
+    timeout: 250,
+    window_size: [1920, 1080],
+    debug: false)
+  )
 end
-Capybara.default_driver = :poltergeist
-Capybara.javascript_driver = :poltergeist
+
+# Setups browser driver with capybara/poltergeist
+Capybara.default_driver = :headless_chrome
+Capybara.javascript_driver = :headless_chrome
 Capybara.app_host = "https://#{server}"
+
 # don't run own server on a random port
 Capybara.run_server = false
 # At moment we have only phantomjs
