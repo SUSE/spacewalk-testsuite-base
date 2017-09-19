@@ -35,3 +35,6 @@ chrome_driver
 
 # try out if works without this
 # dependency
+
+# need update
+gem update selenium-webdriver

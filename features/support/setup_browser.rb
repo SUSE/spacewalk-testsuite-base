@@ -42,7 +42,7 @@ end
 
 Capybara.register_driver(:headless_chrome) do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: %w[headless disable-gpu --disable-web-security] }
+    chromeOptions: { args: %w[headless disable-gpu  window-size=1920,1080 disable-web-security remote-debugging-port=9222] }
   )
 
   Capybara::Selenium::Driver.new(
@@ -63,8 +63,6 @@ Capybara.app_host = "https://#{server}"
 # don't run own server on a random port
 Capybara.run_server = false
 # At moment we have only phantomjs
-
-
 # FIXME
 # screenshots
 #After do |scenario|
