@@ -37,12 +37,10 @@ def restart_driver
   end
 end
 
-# MAIiN
-#
 
 Capybara.register_driver(:headless_chrome) do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: %w[headless disable-gpu  window-size=1920,1080 disable-web-security remote-debugging-port=9222] }
+    chromeOptions: { args: %w[headless disable-gpu  window-size=1920,1080 disable-web-security ignore-certificate-errors remote-debugging-port=9222] }
   )
 
   Capybara::Selenium::Driver.new(
