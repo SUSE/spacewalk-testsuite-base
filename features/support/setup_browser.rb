@@ -37,20 +37,20 @@ def restart_driver
   end
 end
 
-
 Capybara.register_driver(:headless_chrome) do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: %w[headless disable-gpu  window-size=1920,1080 disable-web-security ignore-certificate-errors remote-debugging-port=9222] }
+    chromeOptions: { args: %w[headless disable-gpu window-size=1920,1080 disable-web-security ignore-certificate-errors remote-debugging-port=9222] }
   )
 
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
-    desired_capabilities: capabilities)
-#    js_errors: false,
-#    timeout: 250,
-#    window_size: [1920, 1080],
-#    debug: false)
+    desired_capabilities: capabilities
+  )
+  #    js_errors: false,
+  #    timeout: 250,
+  #    window_size: [1920, 1080],
+  #    debug: false)
 end
 
 # Setups browser driver with capybara/poltergeist
@@ -63,12 +63,12 @@ Capybara.run_server = false
 # At moment we have only phantomjs
 # FIXME
 # screenshots
-#After do |scenario|
+# After do |scenario|
 #  if scenario.failed?
 #    encoded_img = page.driver.render_base64(:png, full: true)
 #    embed("data:image/png;base64,#{encoded_img}", 'image/png')
 #  end
-#end
+# end
 
 # restart always before each feature, we spare ram and
 # avoid ram issues!
