@@ -1,7 +1,7 @@
 # Copyright (c) 2015 SUSE LLC
 # Licensed under the terms of the MIT license.
 
-Feature: XML-RPC "user" namespace.
+Feature: XML-RPC "user" namespace
 
   Scenario: Basic user operations
     Given I am logged in via XML-RPC user as user "admin" and password "admin"
