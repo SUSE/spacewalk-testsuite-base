@@ -82,6 +82,6 @@ def get_os_version(node)
   os_version = os_version_raw.strip.split('=')[1].delete '"'
   _out, code = node.run('pidof systemd', false)
   os_version if code.zero?
-  # os-release for sles11 is not coherent with 12, so we need to add a SP postfix
+  # os-release for SLES 11 systems is not coherent with 12, so we need to add a SP postfix
   os_version.gsub(/\./, '-SP')
 end

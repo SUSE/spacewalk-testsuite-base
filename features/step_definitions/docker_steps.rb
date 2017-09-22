@@ -101,7 +101,7 @@ And(/^all "([^"]*)" container images should be built correctly in the GUI$/) do 
   rescue Timeout::Error
     raise 'at least one image was not built correctly'
   end
-  # don't run this for sles11 (docker feature is not there)
+  # don't run this for SLES 11 systems (docker feature is not there)
   ck_container_imgs(count) unless sle11family($minion)
 end
 
