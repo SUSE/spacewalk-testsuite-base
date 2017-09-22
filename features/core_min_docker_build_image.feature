@@ -55,8 +55,8 @@ Feature: Be able to build container images
   Given I am on the Systems overview page of this "sle-minion"
   Then I should see a "[Container Build Host]" text
   And I wait until no Salt job is running on "sle-minion"
-  And I enable Suse container repository, but not for SLES11 systems
-  And I enable SLES pool and update repository on "sle-minion", but not for SLES11
+  And I enable Suse container repository, but not for SLES 11 systems
+  And I enable SLES pool and update repository on "sle-minion", but not for SLES 11 systems
 
   Scenario: Create an image store without credentials
   Given I am authorized as "admin" with password "admin"
@@ -158,5 +158,5 @@ Feature: Be able to build container images
 
   Scenario: Cleanup: reset channels on the SLES minion
   Given I am authorized as "admin" with password "admin"
-  And I disable Suse container repository, but not for SLES11 systems
+  And I disable Suse container repository, but not for SLES 11 systems
   And I disable SLES pool and update repository on "sle-minion"
