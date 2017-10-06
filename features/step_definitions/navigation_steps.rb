@@ -302,6 +302,16 @@ When(/^I go to the configuration page$/) do
   find_link('Configuration').click
 end
 
+Given(/^I am on the Configuration => Systems => Target systems page$/) do
+  step %(I am authorized)
+  visit("https://#{$server.full_hostname}/rhn/configuration/system/TargetSystems.do")
+end
+
+Given(/^I type "sle-minion" in the search box and click "Go"$/) do
+  find('input[name="filter_string"]').set("#{$minion.full_hostname}")
+  find('button[value="Go"]').click()
+end
+
 Given(/^I am on the patches page$/) do
   step %(I am authorized)
   visit("https://#{$server.full_hostname}/rhn/errata/RelevantErrata.do")
