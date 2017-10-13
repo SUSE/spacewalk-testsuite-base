@@ -308,8 +308,8 @@ Given(/^I am on the Configuration => Systems => Target systems page$/) do
 end
 
 Given(/^I type "sle-minion" in the search box and click "Go"$/) do
-  find('input[name="filter_string"]').set("#{$minion.full_hostname}")
-  find('button[value="Go"]').click()
+  find('input[name="filter_string"]').set(minion.full_hostname.to_s)
+  find('button[value="Go"]').click
 end
 
 Given(/^I am on the patches page$/) do
