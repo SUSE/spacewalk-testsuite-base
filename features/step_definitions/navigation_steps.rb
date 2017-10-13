@@ -310,7 +310,7 @@ end
 Given(/^I type "([^"]*)" in the search box and click "([^"]*)"$/) do |node, button|
   minion_full_hostname = get_target(node).full_hostname.to_s
   find('input[name="filter_string"]').set(minion_full_hostname)
-  find('button[value=button]').click
+  find("button[value=#{button}]").click
 end
 
 Given(/^I am on the patches page$/) do
