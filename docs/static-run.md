@@ -10,6 +10,7 @@ With a static setup, if you break your testing machines, or if you have any trou
 Set up the following environment variables:
 
 * TESTHOST the SUSE Manager server you are testing against
+* PROXY the SUSE Manager proxy (use "None" if there is no proxy)
 * CLIENT the traditional client
 * MINION the Salt minion
 * SSHMINION the SSH-managed Salt minion
@@ -20,6 +21,7 @@ To run all standard tests, from the controller:
 
 ```console
 export TESTHOST="${PREFIX}suma3pg.tf.local"
+export PROXY="None"
 export CLIENT="${PREFIX}clisles12sp3.tf.local"
 export MINION="${PREFIX}minsles12sp3.tf.local"
 export SSHMINION="${PREFIX}minsles12sp3ssh.tf.local"

@@ -1,13 +1,16 @@
 require 'twopence'
 
 # Initialize SSH targets from environment variables
+# If there is no proxy, use "None" for $PROXY environment variable
 raise 'Server IP address or domain name variable empty' if ENV['TESTHOST'].nil?
+raise 'Proxy IP address or domain name variable empty' if ENV['PROXY'].nil?
 raise 'Client IP address or domain name variable empty' if ENV['CLIENT'].nil?
 raise 'Minion IP address or domain name variable empty' if ENV['MINION'].nil?
 raise 'CentOS minion IP address or domain name variable empty' if ENV['CENTOSMINION'].nil?
 raise 'SSH minion IP address or domain name variable empty' if ENV['SSHMINION'].nil?
 
 $server_ip = ENV['TESTHOST']
+$proxy_ip = ENV['PROXY']
 $client_ip = ENV['CLIENT']
 $minion_ip = ENV['MINION']
 $ceos_minion_ip = ENV['CENTOSMINION']
@@ -15,6 +18,7 @@ $ssh_minion_ip = ENV['SSHMINION']
 
 # Define twopence objects
 $client = Twopence.init("ssh:#{$client_ip}")
+$proxy = Twopence.init("ssh:#{$proxy_ip}") if $proxy_ip != 'None'
 $server = Twopence.init("ssh:#{$server_ip}")
 $minion = Twopence.init("ssh:#{$minion_ip}")
 $ceos_minion = Twopence.init("ssh:#{$ceos_minion_ip}")
@@ -23,14 +27,16 @@ $ssh_minion = Twopence.init("ssh:#{$ssh_minion_ip}")
 # Lavanda library module extension
 # Look at support/lavanda.rb for more details
 $server.extend(LavandaBasic)
+$proxy.extend(LavandaBasic) if $proxy
 $client.extend(LavandaBasic)
 $minion.extend(LavandaBasic)
 $ceos_minion.extend(LavandaBasic)
 $ssh_minion.extend(LavandaBasic)
 
 # Initialize hostname
-nodes = [$server, $client, $minion, $ceos_minion, $ssh_minion]
+nodes = [$server, $proxy, $client, $minion, $ceos_minion, $ssh_minion]
 nodes.each do |node|
+  next if node.nil?
   hostname, _local, _remote, code = node.test_and_store_results_together('hostname', 'root', 500)
   raise 'Cannot get hostname for node' if code.nonzero?
   node.init_hostname(hostname)
@@ -44,6 +50,8 @@ def get_target(host)
   case host
   when 'server'
     node = $server
+  when 'proxy'
+    node = $proxy
   when 'ceos-minion'
     node = $ceos_minion
   when 'ssh-minion'

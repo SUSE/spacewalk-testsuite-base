@@ -32,7 +32,7 @@ Possible values are currently:
 | Test host | Ruby target |  Bash environment variable | Step host name | Sumaform module |
 | --------- | ----------- | -------------------------- | -------------- | --------------- |
 | SUSE Manager server | ```$server``` | ```$TESTHOST``` |  | ```"suse_manager"``` |
-| SUSE Manager proxy | (unsupported ATM) | (unsupported ATM) |  | ```"proxy"``` |
+| SUSE Manager proxy | ```$proxy``` | ```$PROXY``` | ```"proxy"``` | ```"suse_manager_proxy"``` |
 | SLES traditional client | ```$client``` | ```$CLIENT``` | ```"sle-client"``` | ```"client"``` |
 | SLES Salt minion | ```$minion``` | ```$MINION``` | ```"sle-minion"``` or ```"sle-migrated-minion"``` | ```"minion"``` |
 | SLES Salt SSH minion | ```$ssh_minion``` | ```$SSHMINION``` | ```"ssh-minion"``` | ```"minion"``` |
