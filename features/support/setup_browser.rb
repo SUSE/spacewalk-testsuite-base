@@ -71,6 +71,11 @@ Before do
   restart_driver
 end
 
+# do proxy tests only when we have a proxy
+Before('@proxy') do |scenario|
+  scenario.skip_invoke! unless $proxy
+end
+
 # embed a screenshot after each failed scenario
 After do |scenario|
   if scenario.failed?

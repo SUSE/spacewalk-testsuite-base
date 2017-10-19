@@ -406,6 +406,22 @@ Then(/^I should see something$/) do
     )
 end
 
+Then(/^I should see no system apart from the proxy$/) do
+  if $proxy.nil?
+    step %(I should see a "No systems." text)
+  else
+    step %(I should see a "1 - 1 of 1" text)
+  end
+end
+
+Then(/^I should see no virtual system apart from the proxy$/) do
+  if $proxy.nil?
+    step %(I should see a "No Virtual Systems." text)
+  else
+    step %(I should see a "1 - 2 of 2" text)
+  end
+end
+
 Then(/^I should see "([^"]*)" systems selected for SSM$/) do |arg|
   within(:xpath, '//span[@id="spacewalk-set-system_list-counter"]') do
     raise unless has_content?(arg)

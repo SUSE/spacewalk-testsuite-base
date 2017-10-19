@@ -11,7 +11,7 @@ Feature: Main landing page texts and links
 
   Scenario: Completeness of the side navigation bar and the content frame
     Then I should see a "System Overview" text
-    And I should see a "No systems." text
+    And I should see no system apart from the proxy
     And I should see a "Overview" link in the left menu
     And I should see a "Systems" link in the left menu
     And I should see a "System Groups" link in the left menu
@@ -55,7 +55,7 @@ Feature: Main landing page texts and links
     When I click Systems, under Systems node
     And I follow "Virtual Systems" in the left menu
     Then I should see a "Virtual Systems" text
-    And I should see a "No Virtual Systems." text
+    And I should see no virtual system apart from the proxy
     And the current path is "/rhn/systems/VirtualList.do"
 
   Scenario: Check sidebar link destination for Systems => Out of Date
@@ -76,7 +76,7 @@ Feature: Main landing page texts and links
     When I click Systems, under Systems node
     And I follow "Non Compliant" in the left menu
     Then I should see a "Non Compliant Systems" text
-    And I should see a "No systems." text
+    And I should see no system apart from the proxy
     And the current path is "/rhn/systems/ExtraPackagesSystems.do"
 
   Scenario: Check sidebar link destination for Systems => Without System Type
@@ -90,7 +90,7 @@ Feature: Main landing page texts and links
     When I click Systems, under Systems node
     And I follow "Ungrouped" in the left menu
     Then I should see a "Ungrouped Systems" text
-    And I should see a "No systems." text
+    And I should see no system apart from the proxy
     And the current path is "/rhn/systems/Ungrouped.do"
 
   Scenario: Check sidebar link destination for Systems => Inactive
@@ -104,7 +104,7 @@ Feature: Main landing page texts and links
     When I click Systems, under Systems node
     And I follow "Recently Registered" in the left menu
     Then I should see a "Recently Registered Systems" text
-    And I should see a "No systems." text
+    And I should see no system apart from the proxy
     And I should see a "View systems registered:" text
     And the current path is "/rhn/systems/Registered.do"
 
@@ -112,7 +112,7 @@ Feature: Main landing page texts and links
     When I click Systems, under Systems node
     And I follow "Proxy" in the left menu
     Then I should see a "Proxy Servers" text
-    And I should see a "No systems." text
+    And I should see no system apart from the proxy
     And the current path is "/rhn/systems/ProxyList.do"
 
   Scenario: Check sidebar link destination for Systems => Duplicate Systems
@@ -130,7 +130,7 @@ Feature: Main landing page texts and links
     When I click Systems, under Systems node
     And I follow "System Currency" in the left menu
     Then I should see a "System Currency Report" text
-    And I should see a "No systems." text
+    And I should see no system apart from the proxy
     And the current path is "/rhn/systems/SystemCurrency.do"
 
   Scenario: Check sidebar link destination for Systems => System Types
