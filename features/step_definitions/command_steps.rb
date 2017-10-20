@@ -44,6 +44,10 @@ When(/^file "([^"]*)" exists on server$/) do |arg1|
   $server.run("test -f #{arg1}")
 end
 
+When(/^file "([^"]*)" not exists on server$/) do |arg1|
+  $server.run("test -f #{arg1}")
+end
+
 When(/^file "([^"]*)" contains "([^"]*)"$/) do |arg1, arg2|
   sleep(3)
   output = {}
@@ -167,6 +171,13 @@ Then(/^Service "([^"]*)" is running on the Server$/) do |service|
   output = sshcmd("systemctl is-active '#{service}'", ignore_err: true)[:stdout]
   output.chomp!
   raise if output != 'active'
+end
+
+# snapshots
+When(/^I take a snapshot "([^"]*)"$/) do |name|
+  $sshout = ''
+  $sshout = `echo | ssh -o StrictHostKeyChecking=no root@$VHOST qemu-img snapshot -c #{name} $IMGDIR/$VMDISK.qcow2`
+  puts 'Creating snapsnot failed...' unless $CHILD_STATUS.success?
 end
 
 When(/^I run "([^"]*)" on "([^"]*)"$/) do |cmd, host|
