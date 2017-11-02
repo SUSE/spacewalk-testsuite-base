@@ -231,7 +231,8 @@ When(/^I enable IPv6 forwarding on all interfaces of the SLE minion$/) do
   $minion.run('sysctl net.ipv6.conf.all.forwarding=1')
 end
 
-And(/^I register the centos7 as tradclient$/) do
+And(/^I register the "([^"])" as tradclient$/) do |arg1|
+  node = get_target(arg1)
   cert_path = '/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT'
   wget = 'wget --no-check-certificate -O'
   register = 'rhnreg_ks --username=admin --password=admin --force \\' \
