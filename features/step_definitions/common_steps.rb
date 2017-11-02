@@ -405,7 +405,8 @@ Then(/^on this client the file "([^"]*)" should have the content "([^"]*)"$/) do
   $client.run("grep #{content} #{filename}")
 end
 
-Then(/^I remove server hostname from hosts trad-client$/) do
+Then(/^I remove server hostname from hosts file on "([^"]*)"$/) do |arg1|
+  node = get_target(arg1)
   $client.run("sed -i \'s/#{$server.full_hostname}//\' /etc/hosts")
 end
 
